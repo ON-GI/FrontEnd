@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+body {
+  min-height: 100svh;
+  font-family: 'Pretendard Variable';
+}
+
+#root {
+  min-height: 100svh;
+}
 @theme {
   --color-primary-50: #f4faf5;
   --color-primary-100: #e4f4e4;
