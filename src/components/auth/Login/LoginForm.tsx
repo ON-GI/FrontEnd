@@ -1,20 +1,22 @@
-import { FormEvent, useRef } from 'react';
+import { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 import useLogin from './useLogin';
 
 import BaseInput from '../../common/BaseInput';
+import useLoginForm from './useLoginForm';
+import BaseButton from '../../common/BaseButton';
 
 const LoginForm = () => {
-  const idInputRef = useRef<HTMLInputElement>(null);
-  const passwordInputRef = useRef<HTMLInputElement>(null);
-
+  const { userId, password, handlePasswordChange, handleUserIdChange, isFormValid } = useLoginForm();
   const { mutate, error, isError } = useLogin();
+
+  console.log(userId);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    mutate({ id: idInputRef.current!.value, password: passwordInputRef.current!.value });
+    mutate({ id: userId, password: password });
   };
 
   return (
@@ -25,12 +27,20 @@ const LoginForm = () => {
           <br /> 이용해보세요!
         </p>
         <form onSubmit={handleSubmit} id="login" className="flex h-full flex-col justify-between">
-          <BaseInput ref={idInputRef} type="text" id="id" placeholder="아이디" className="mb-4" />
+          <BaseInput
+            value={userId}
+            onChange={handleUserIdChange}
+            type="text"
+            id="id"
+            placeholder="아이디"
+            className="mb-4"
+          />
 
           <BaseInput
             inputState={isError ? 'invalid' : 'default'}
             error={error?.message}
-            ref={passwordInputRef}
+            onChange={handlePasswordChange}
+            value={password}
             type="password"
             id="password"
             placeholder="비밀번호"
@@ -45,9 +55,14 @@ const LoginForm = () => {
             회원가입 하기
           </Link>
         </p>
-        <button form="login" type="submit" className="bg-primary-400 w-full rounded-lg p-3 text-white">
+        <BaseButton
+          disabled={!isFormValid}
+          form="login"
+          type="submit"
+          className="bg-primary-400 w-full rounded-lg p-3 text-white"
+        >
           로그인
-        </button>
+        </BaseButton>
       </div>
     </>
   );
