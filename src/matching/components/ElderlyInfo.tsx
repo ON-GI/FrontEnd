@@ -1,100 +1,118 @@
-import { useState } from 'react'; // ✅ 추가
-import { useMatchingContext } from '../store/MatchingContext';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import RejectModal from './RejectModal'; // ✅ 추가
+import { useMatchingContext } from '../store/MatchingContext';
 
 const ElderlyInfo = () => {
-  const { elderlyInfo } = useMatchingContext();
+  const { elderlyInfo, setMatchingStatus } = useMatchingContext();
   const navigate = useNavigate();
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  const [isRejected, setIsRejected] = useState(false);
+
+  const handleNext = (isAccepted: boolean, isRejected: boolean) => {
+    setMatchingStatus({
+      isAccepted,
+      isRejected,
+    });
+
+    if (isAccepted) {
+      navigate('/matching/adjustment');
+    } else {
+      navigate('/'); // 임의 작성. 어디로 연결될지 경로만 적으면 됩니다 !!!!!!!!
+    }
+  };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center bg-gray-100 px-4 py-6">
-      {/* 제목 */}
-      <h1
-        className="absolute top-[67px] left-5 text-[24px] leading-[140%] font-semibold tracking-[-0.02em] text-gray-900"
-        style={{ fontFamily: 'Pretendard' }}
-      >
-        김OO 어르신 정보를 확인해주세요
-      </h1>
+    <div className="flex min-h-screen flex-col items-center justify-between px-6 pb-6">
+      {/* 타이틀 */}
+      <div className="mt-10 w-full max-w-md">
+        <h1 className="mb-6 text-left text-xl font-bold text-gray-900">
+          {elderlyInfo.name} <br /> 정보를 확인해주세요
+        </h1>
 
-      {/* 어르신 정보 카드 */}
-      <div className="absolute top-1/2 left-1/2 flex h-[413px] w-[333px] -translate-x-1/2 -translate-y-1/2 flex-col items-start gap-[8px] rounded-lg bg-gray-50 px-[11px] py-[22px]">
-        <div className="flex h-[369px] w-[311px] flex-col items-start gap-[20px]">
-          <table className="w-full text-sm text-gray-700">
-            <tbody>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">지역</td>
-                <td className="text-right">{elderlyInfo.region}</td>
-              </tr>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">
-                  근무 요일 및 시간
-                </td>
-                <td className="text-right">{elderlyInfo.schedule}</td>
-              </tr>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">케어항목</td>
-                <td className="text-right">{elderlyInfo.careItems.join(', ')}</td>
-              </tr>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">급여</td>
-                <td className="text-right">{elderlyInfo.hourlyWage.toLocaleString()}원</td>
-              </tr>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">복리후생</td>
-                <td className="text-right">{elderlyInfo.benefits}</td>
-              </tr>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">어르신 정보</td>
-                <td className="text-right">
-                  {elderlyInfo.birthYear}년생 ({new Date().getFullYear() - elderlyInfo.birthYear}세),{' '}
-                  {elderlyInfo.gender}, {elderlyInfo.longTermCareGrade || '없음'}
-                </td>
-              </tr>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">치매 증상</td>
-                <td className="text-right">{elderlyInfo.dementia}</td>
-              </tr>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">동거인 여부</td>
-                <td className="text-right">{elderlyInfo.cohabitation}</td>
-              </tr>
-              <tr>
-                <td className="text-[16px] leading-[120%] font-normal tracking-[-0.02em] text-gray-900">담당 기관</td>
-                <td className="text-right">{elderlyInfo.institution}</td>
-              </tr>
-            </tbody>
-          </table>
+        {/* 어르신 정보 카드 */}
+        <div className="rounded-lg bg-gray-100 p-4">
+          <p>
+            <strong>지역:</strong> {elderlyInfo.region}
+          </p>
+          <p>
+            <strong>근무 요일 및 시간:</strong> {elderlyInfo.schedule}
+          </p>
+          <p>
+            <strong>케어항목:</strong> {elderlyInfo.careItems.join(', ')}
+          </p>
+          <p>
+            <strong>급여:</strong> {elderlyInfo.hourlyWage.toLocaleString()}원
+          </p>
+          <p>
+            <strong>복리후생:</strong> {elderlyInfo.benefits}
+          </p>
+          <p>
+            <strong>어르신 정보:</strong> {elderlyInfo.birthYear}년생, {elderlyInfo.gender},{' '}
+            {elderlyInfo.longTermCareGrade ?? '없음'}
+          </p>
+          <p>
+            <strong>치매 증상:</strong> {elderlyInfo.dementia}
+          </p>
+          <p>
+            <strong>동거인 여부:</strong> {elderlyInfo.cohabitation}
+          </p>
+          <p>
+            <strong>담당 기관:</strong> {elderlyInfo.institution}
+          </p>
         </div>
       </div>
 
-      {/* 하단 고정 버튼 영역 */}
-      <div className="fixed bottom-6 left-1/2 flex w-[335px] -translate-x-1/2 gap-2">
-        <button
-          className="flex h-[50px] w-[88px] items-center justify-center rounded-lg bg-gray-300 font-semibold text-gray-700"
-          onClick={() => setIsRejectModalOpen(true)} // ✅ 수정: 클릭 시 모달 열기
-        >
-          거절하기
-        </button>
-
-        <button
-          className="flex h-[50px] w-[238px] items-center justify-center rounded-lg bg-[#57AD57] font-semibold text-white"
-          onClick={() => navigate('/matching/caregiver/adjust')}
-        >
-          수락 / 조율 요청
-        </button>
+      {/* 버튼 영역 (하단 중앙 정렬) */}
+      <div className="fixed bottom-6 flex w-full max-w-md px-6">
+        {isRejected ? (
+          // 거절 완료 상태면 "뒤로가기" 버튼만 표시
+          <button className="w-full rounded-md bg-green-600 py-3 text-white" onClick={() => navigate('/')}>
+            뒤로가기
+          </button>
+        ) : (
+          <div className="flex w-full gap-4">
+            <button
+              className="w-1/2 rounded-md bg-gray-300 py-2 text-sm text-gray-900"
+              onClick={() => setIsRejectModalOpen(true)}
+            >
+              거절하기
+            </button>
+            <button
+              className="w-1/2 rounded-md bg-green-600 py-2 text-sm text-white"
+              onClick={() => handleNext(true, false)}
+            >
+              수락 / 조율 요청
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* ✅ 거절 모달 추가 */}
-      <RejectModal
-        isOpen={isRejectModalOpen}
-        onClose={() => setIsRejectModalOpen(false)} // 닫기 기능
-        onReject={() => {
-          setIsRejectModalOpen(false);
-          console.log('거절됨'); // 이후 백엔드 로직 추가 가능
-        }}
-      />
+      {isRejectModalOpen && (
+        <div className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center">
+          <div className="absolute top-1/2 left-1/2 flex w-80 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-lg bg-white p-6 shadow-lg">
+            <p className="mb-6 text-center text-lg font-semibold text-gray-900">
+              어르신의 요청을 <br /> 거절하는게 맞으신가요?
+            </p>
+            <div className="flex gap-4">
+              <button
+                className="w-32 rounded-md bg-gray-300 py-2 text-gray-900"
+                onClick={() => setIsRejectModalOpen(false)}
+              >
+                아니요
+              </button>
+              <button
+                className="w-32 rounded-md bg-green-600 py-2 text-white"
+                onClick={() => {
+                  setIsRejected(true);
+                  setIsRejectModalOpen(false);
+                }}
+              >
+                네
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
