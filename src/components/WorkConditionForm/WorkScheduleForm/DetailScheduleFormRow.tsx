@@ -40,14 +40,19 @@ const DetailScheduleFormRow = ({ children, dayOfWeek }: { children: React.ReactN
   });
 
   return (
-    <li className="flex justify-between">
+    <li className="flex gap-4">
       <div
         className={`flex size-[50px] items-center justify-center rounded-lg transition-colors ${valid ? 'bg-primary-400 text-white' : 'bg-gray-100'}`}
       >
         {children}
       </div>
-      <StartTimeDropDown timeOptions={timeOptions} onChange={onChangeTime} />
-      <EndTimeDropDown timeOptions={timeOptions} onChange={onChangeTime} />
+      <div className="w-[45%]">
+        <StartTimeDropDown timeOptions={timeOptions} onChange={onChangeTime} />
+      </div>
+
+      <div className="w-[45%]">
+        <EndTimeDropDown timeOptions={timeOptions} onChange={onChangeTime} />
+      </div>
     </li>
   );
 };
