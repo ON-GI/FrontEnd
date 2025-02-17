@@ -73,7 +73,7 @@ const RegionSelector = ({
         <p className="w-1/2 py-2.5">시/군/구</p>
         <p className="w-1/2 py-2.5">동/읍/면</p>
       </div>
-      <div className="flex min-h-0 divide-x-[1px] divide-gray-100">
+      <div className="flex h-[100svh] min-h-0 divide-x-[1px] divide-gray-100">
         {/* 시/도 */}
         <div className="relative flex h-full min-w-[85px] flex-col space-y-2.5 overflow-x-auto overflow-y-auto bg-gray-50">
           <ul role="radiogroup" className="overflow-auto bg-gray-50 text-center">
