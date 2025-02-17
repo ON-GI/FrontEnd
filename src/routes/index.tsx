@@ -51,7 +51,6 @@ const MatchingLayout = () => (
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/login', element: <Login /> },
-
   {
     path: '/signup/caregiver',
     element: <CaregiverSignupLayout />,
