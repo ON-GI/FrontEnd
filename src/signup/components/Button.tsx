@@ -7,6 +7,7 @@ interface ButtonProps {
   isFixed?: boolean;
   className?: string;
   variant?: 'primary' | 'secondary' | 'outline' | 'disabled';
+  fullWidth?: boolean; // ✅ 새로운 prop 추가
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   isFixed = false,
   className = '',
   variant = 'primary',
+  fullWidth = true, // ✅ 기본값은 `true`
 }) => {
   const variantStyles = {
     primary: 'bg-primary-500 text-white',
@@ -29,9 +31,9 @@ const Button: React.FC<ButtonProps> = ({
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`w-full rounded-md py-3 font-semibold ${
+        className={`rounded-md py-3 font-semibold ${
           disabled ? variantStyles['disabled'] : variantStyles[variant]
-        } ${className}`}
+        } ${className} ${fullWidth ? 'w-full' : ''}`}
       >
         {text}
       </button>

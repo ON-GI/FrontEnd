@@ -1,6 +1,7 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { SignupProvider } from '../signup/store/SignupContext';
 import { MatchingProvider } from '../matching/store/MatchingContext';
+import { AdminSignupProvider } from '../adminSignup/store/AdminSignupContext';
 
 import StepIdPassword from '../signup/pages/StepIdPassword';
 import StepBasicInfo from '../signup/pages/StepBasicInfo';
@@ -18,160 +19,71 @@ import MatchingComplete from '../matching/components/MatchingComplete';
 import Home from './pages/Home';
 import Login from './pages/Login';
 
+import AdminSignupStep1 from '../adminSignup/pages/AdminSignup_IdPassword';
+import AdminSignupStep2 from '../adminSignup/pages/AdminSignup_ChoiceRole';
+import AdminSignupStep3 from '../adminSignup/pages/AdminSignup_CenterDirector';
+import AdminSignupStep4 from '../adminSignup/pages/AdminSignup_CenterDirector2';
+import AdminSignupStep5 from '../adminSignup/pages/AdminSignup_CenterMember';
+import AdminSignupComplete from '../adminSignup/pages/AdminSignup_Complete';
+
+const CaregiverSignupLayout = () => (
+  <SignupProvider>
+    <Outlet />
+  </SignupProvider>
+);
+
+const AdminSignupLayout = () => (
+  <AdminSignupProvider>
+    <Outlet />
+  </AdminSignupProvider>
+);
+
+const MatchingLayout = () => (
+  <MatchingProvider>
+    <Outlet />
+  </MatchingProvider>
+);
+
 const router = createBrowserRouter([
+  { path: '/', element: <Home /> },
+  { path: '/login', element: <Login /> },
+
   {
-    path: '/signup/caregiver/step1',
-    element: (
-      <SignupProvider>
-        <StepIdPassword />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/caregiver/step2',
-    element: (
-      <SignupProvider>
-        <StepBasicInfo />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/caregiver/step3',
-    element: (
-      <SignupProvider>
-        <StepCertifications />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/caregiver/step4',
-    element: (
-      <SignupProvider>
-        <StepOptionalInfo />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/caregiver/step5',
-    element: (
-      <SignupProvider>
-        <StepExperienceServices />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/caregiver/step6',
-    element: (
-      <SignupProvider>
-        <StepExperienceServices_2 />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/caregiver/complete',
-    element: (
-      <SignupProvider>
-        <SignupComplete />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/admin/step1',
-    element: (
-      <SignupProvider>
-        <StepIdPassword />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/admin/step2',
-    element: (
-      <SignupProvider>
-        <StepBasicInfo />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/admin/step3',
-    element: (
-      <SignupProvider>
-        <StepCertifications />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/admin/step4',
-    element: (
-      <SignupProvider>
-        <StepOptionalInfo />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/admin/step5',
-    element: (
-      <SignupProvider>
-        <StepExperienceServices />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/admin/step6',
-    element: (
-      <SignupProvider>
-        <StepExperienceServices_2 />
-      </SignupProvider>
-    ),
-  },
-  {
-    path: '/signup/admin/complete',
-    element: (
-      <SignupProvider>
-        <SignupComplete />
-      </SignupProvider>
-    ),
+    path: '/signup/caregiver',
+    element: <CaregiverSignupLayout />,
+    children: [
+      { path: 'step1', element: <StepIdPassword /> },
+      { path: 'step2', element: <StepBasicInfo /> },
+      { path: 'step3', element: <StepCertifications /> },
+      { path: 'step4', element: <StepOptionalInfo /> },
+      { path: 'step5', element: <StepExperienceServices /> },
+      { path: 'step6', element: <StepExperienceServices_2 /> },
+      { path: 'complete', element: <SignupComplete /> },
+    ],
   },
 
   {
-    path: '/matching/elderly-info',
-    element: (
-      <MatchingProvider>
-        <ElderlyInfo />
-      </MatchingProvider>
-    ),
-  },
-  {
-    path: '/matching/adjustment',
-    element: (
-      <MatchingProvider>
-        <AdjustForm />
-      </MatchingProvider>
-    ),
-  },
-  {
-    path: '/matching/qualification',
-    element: (
-      <MatchingProvider>
-        <QualificationForm />
-      </MatchingProvider>
-    ),
-  },
-  {
-    path: '/matching/completed',
-    element: (
-      <MatchingProvider>
-        <MatchingComplete />
-      </MatchingProvider>
-    ),
+    path: '/adminSignup',
+    element: <AdminSignupLayout />,
+    children: [
+      { path: 'step1', element: <AdminSignupStep1 /> },
+      { path: 'step2', element: <AdminSignupStep2 /> },
+      { path: 'step3', element: <AdminSignupStep3 /> },
+      { path: 'step4', element: <AdminSignupStep4 /> },
+      { path: 'step5', element: <AdminSignupStep5 /> },
+      { path: 'complete', element: <AdminSignupComplete /> },
+    ],
   },
 
   {
-    path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
+    path: '/matching',
+    element: <MatchingLayout />,
+    children: [
+      { path: 'elderly-info', element: <ElderlyInfo /> },
+      { path: 'adjustment', element: <AdjustForm /> },
+      { path: 'qualification', element: <QualificationForm /> },
+      { path: 'completed', element: <MatchingComplete /> },
+    ],
   },
 ]);
 
