@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useSignupContext } from '../store/SignupContext';
-import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 
 const CAREER_OPTIONS = [
@@ -92,9 +91,26 @@ const StepOptionalInfo = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        <Button text="다음에 하기" onClick={() => handleComplete(true)} variant="secondary" className="flex-1" />
-        <Button text="입력 완료" onClick={() => handleComplete()} disabled={!description.trim()} className="flex-1" />
+      {/* 버튼 */}
+      <div className="mx-auto flex w-full max-w-md gap-2">
+        {/* 다음에 하기 버튼 (1/3 크기, 회색 배경) */}
+        <button
+          onClick={() => handleComplete(true)}
+          className="w-1/3 rounded-md border border-gray-300 bg-gray-300 px-4 py-3 font-semibold text-gray-700"
+        >
+          다음에 하기
+        </button>
+
+        {/* 입력 완료 버튼 (2/3 크기, 활성화/비활성화 스타일) */}
+        <button
+          onClick={() => handleComplete()}
+          disabled={!description.trim()}
+          className={`w-2/3 rounded-md px-4 py-3 font-semibold ${
+            !description.trim() ? 'bg-primary-100 cursor-not-allowed text-white' : 'bg-primary-500 text-white'
+          }`}
+        >
+          입력 완료
+        </button>
       </div>
     </div>
   );
