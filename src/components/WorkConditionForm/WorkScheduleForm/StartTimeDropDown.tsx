@@ -18,7 +18,7 @@ const StartTimeDropDown = ({
       handleSelect={(value) => {
         setStartTime(value);
       }}
-      className="min-w-[125px]"
+      className="h-full min-w-[125px]"
     >
       <DropDown.Trigger placeholder="근무 시작 시간" className="w-full text-center" />
       <DropDown.Options>

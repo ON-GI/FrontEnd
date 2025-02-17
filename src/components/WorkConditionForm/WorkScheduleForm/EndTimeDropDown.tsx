@@ -14,7 +14,7 @@ const EndTimeDropDown = ({
     onChange('end', endTime);
   }, [endTime]);
   return (
-    <DropDown selectValue={endTime} handleSelect={(value) => setEndTime(value)} className="min-w-[125px]">
+    <DropDown selectValue={endTime} handleSelect={(value) => setEndTime(value)} className="h-full min-w-[125px]">
       <DropDown.Trigger placeholder="근무 종료 시간" className="w-full text-center" />
       <DropDown.Options>
         {timeOptions.map((value) => (
