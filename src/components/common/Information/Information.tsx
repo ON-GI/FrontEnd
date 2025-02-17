@@ -5,7 +5,7 @@ import InformationList from './InformationList';
 import InformationDesc from './InformationDesc';
 
 const Information = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex flex-col gap-5 rounded-lg bg-gray-50 px-3 py-5">{children}</div>;
+  return <div className="flex flex-col gap-5 rounded-lg bg-gray-50 p-5">{children}</div>;
 };
 
 export default Information;
