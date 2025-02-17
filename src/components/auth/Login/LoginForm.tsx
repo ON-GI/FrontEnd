@@ -1,4 +1,4 @@
-import { FormEvent, useEffect } from 'react';
+import { FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import useLogin from './useLogin';
@@ -12,7 +12,7 @@ const LoginForm = () => {
   const q = searchParams.get('q')!;
 
   const { userId, password, handlePasswordChange, handleUserIdChange, isFormValid } = useLoginForm();
-  const { mutate, error, isError } = useLogin(q === 'caregiver' ? 'ROLE_CAREGIVER' : 'ROLE_ADMIN');
+  const { mutate, error, isError } = useLogin(q === 'caregiver' ? 'ROLE_CAREGIVER' : 'ROLE_CENTER');
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

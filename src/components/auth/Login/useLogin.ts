@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import client from '../../../api/instnace';
 
-const useLogin = (authority: 'ROLE_CAREGIVER' | 'ROLE_ADMIN') => {
+const useLogin = (authority: 'ROLE_CAREGIVER' | 'ROLE_CENTER') => {
   return useMutation({
     mutationFn: async ({ id, password }: { id: string; password: string }) => {
       const response = await client.post('/auth/login', {
