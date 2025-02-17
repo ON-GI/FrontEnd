@@ -20,7 +20,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 
 import AdminSignupStep1 from '../adminSignup/pages/AdminSignup_IdPassword';
-import AdminSignupStep2 from '../adminSignup/pages/AdminSignup_ ChoiceRole';
+import AdminSignupStep2 from '../adminSignup/pages/AdminSignup_ChoiceRole';
 import AdminSignupStep3 from '../adminSignup/pages/AdminSignup_CenterDirector';
 import AdminSignupStep4 from '../adminSignup/pages/AdminSignup_CenterDirector2';
 import AdminSignupStep5 from '../adminSignup/pages/AdminSignup_CenterMember';
