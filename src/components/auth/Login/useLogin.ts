@@ -2,12 +2,13 @@ import { useMutation } from '@tanstack/react-query';
 
 import client from '../../../api/instnace';
 
-const useLogin = () => {
+const useLogin = (authority: 'ROLE_CAREGIVER' | 'ROLE_ADMIN') => {
   return useMutation({
     mutationFn: async ({ id, password }: { id: string; password: string }) => {
-      const response = await client.post('/caregiver/auth/login', {
+      const response = await client.post('/auth/login', {
         id,
         password,
+        authority,
       });
 
       if (response.status !== 200) {
