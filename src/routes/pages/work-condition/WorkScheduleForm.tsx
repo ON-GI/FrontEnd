@@ -53,58 +53,56 @@ const WorkScheduleForm = () => {
   };
 
   return (
-    <div className="relative p-5">
-      <div className="mb-5">
+    <div className="relative flex min-h-[100svh] flex-col justify-between p-5">
+      <div>
         <h3 className="mb-3 text-2xl font-semibold">
           근무 가능한 시간대와 <br />
           희망 시급을 알려주세요
         </h3>
-        <p className="text-gray-600">모두 추후에 관리자와 조율이 가능해요</p>
-      </div>
-
-      {/* 근무시간 간단하게*/}
-      <div className="mb-5">
-        <div className="mb-3">
-          <h4 className="text-xl text-gray-900">근무 시간</h4>
-          <p className="text-gray-600">중복 선택 가능해요</p>
-        </div>
-        {timeFormType === 'simple' && <SimpleScheduleForm />}
-        {timeFormType === 'detail' && <DetailScheduleForm />}
-
-        <span
-          onClick={() => {
-            setTimeFormType(timeFormType === 'detail' ? 'simple' : 'detail');
-            setWorkConditions({ ...workConditions, workTimes: [] });
-          }}
-          className="text-primary-400 mt-4 inline-flex cursor-pointer items-center gap-2 font-medium"
-        >
-          {timeFormType === 'detail' ? '간단하게 입력할래요' : '더 자세하게 입력할래요'}
-          <img src="../src/assets/primary_right-arrow.png" alt="화살표" className="inline" />
-        </span>
-      </div>
-
-      <div className="mb-5">
-        <div className="mb-3">
-          <h4 className="mb-3 text-xl text-gray-900">희망 시급</h4>
-          <div className="flex gap-2">
-            <SelectPayType
-              value={workConditions.payType}
-              handleChange={(value) => {
-                setWorkConditions({ ...workConditions, payType: value as PayType });
-              }}
-            />
-            <PlaceHolderInput placeholder="원" onChange={handleChange} value={workConditions.payAmount} />
+        <p className="mb-5 text-gray-600">모두 추후에 관리자와 조율이 가능해요</p>
+        <div className="mb-5">
+          <div className="mb-3">
+            <h4 className="text-xl text-gray-900">근무 시간</h4>
+            <p className="text-gray-600">중복 선택 가능해요</p>
           </div>
+          {timeFormType === 'simple' && <SimpleScheduleForm />}
+          {timeFormType === 'detail' && <DetailScheduleForm />}
+
+          <span
+            onClick={() => {
+              setTimeFormType(timeFormType === 'detail' ? 'simple' : 'detail');
+              setWorkConditions({ ...workConditions, workTimes: [] });
+            }}
+            className="text-primary-400 mt-4 inline-flex cursor-pointer items-center gap-2 font-medium"
+          >
+            {timeFormType === 'detail' ? '간단하게 입력할래요' : '더 자세하게 입력할래요'}
+            <img src="../src/assets/primary_right-arrow.png" alt="화살표" className="inline" />
+          </span>
         </div>
-        <label className="inline-flex cursor-pointer items-center gap-2">
-          <input
-            checked={workConditions.negotiable}
-            onChange={() => setNegotiable()}
-            type="checkbox"
-            className="checked:bg-primary-400 checked:border-primary-400 size-5 appearance-none rounded-full border-2 border-gray-300 transition-all checked:bg-[url(../../src/assets/check.svg)] checked:bg-center"
-          />
-          <span className="text-gray-900">협의 가능</span>
-        </label>
+
+        <div className="mb-5">
+          <div className="mb-3">
+            <h4 className="mb-3 text-xl text-gray-900">희망 시급</h4>
+            <div className="flex gap-2">
+              <SelectPayType
+                value={workConditions.payType}
+                handleChange={(value) => {
+                  setWorkConditions({ ...workConditions, payType: value as PayType });
+                }}
+              />
+              <PlaceHolderInput placeholder="원" onChange={handleChange} value={workConditions.payAmount} />
+            </div>
+          </div>
+          <label className="inline-flex cursor-pointer items-center gap-2">
+            <input
+              checked={workConditions.negotiable}
+              onChange={() => setNegotiable()}
+              type="checkbox"
+              className="checked:bg-primary-400 checked:border-primary-400 size-5 appearance-none rounded-full border-2 border-gray-300 transition-all checked:bg-[url(../../src/assets/check.svg)] checked:bg-center"
+            />
+            <span className="text-gray-900">협의 가능</span>
+          </label>
+        </div>
       </div>
 
       <div className="flex gap-4">
