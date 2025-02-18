@@ -13,7 +13,7 @@ const AdminSignupStep5 = () => {
     if (!isValidCenterCode) return;
     setAdminSignupData({ ...adminSignupData, centerCode });
     console.log({ ...adminSignupData, centerCode });
-    navigate('/adminSignup/complete');
+    navigate('/center/signup/complete');
   };
 
   return (

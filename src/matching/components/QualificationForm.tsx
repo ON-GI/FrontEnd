@@ -39,7 +39,7 @@ const QualificationForm = () => {
       workHistory,
     });
 
-    navigate('/matching/completed');
+    navigate('/caregiver/matching/completed');
   };
 
   const handleDeleteWorkHistory = (category: string) => {

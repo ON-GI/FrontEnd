@@ -15,7 +15,7 @@ const ElderlyInfo = () => {
     });
 
     if (isAccepted) {
-      navigate('/matching/adjustment');
+      navigate('/caregiver/matching/adjustment');
     } else {
       navigate('/'); // 임의 작성. 어디로 연결될지 경로만 적으면 됩니다 !!!!!!!!
     }

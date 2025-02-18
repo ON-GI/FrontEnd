@@ -36,9 +36,6 @@ const StepBasicInfo = () => {
     }
   };
   const handleNext = () => {
-    // 현재 URL을 확인하여 'caregiver' 또는 'admin'을 자동으로 감지
-    const basePath = window.location.pathname.includes('admin') ? '/signup/admin' : '/signup/caregiver';
-
     setSignupData({
       ...signupData,
       name,
@@ -47,8 +44,7 @@ const StepBasicInfo = () => {
       hasCar,
       profileImage,
     });
-
-    navigate(`${basePath}/step3`); // 경로를 caregiver/admin에 맞게 설정
+    navigate(`/caregiver/signup/step3`);
   };
 
   return (

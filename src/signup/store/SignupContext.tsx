@@ -6,6 +6,20 @@ interface License {
   licenseGrade: string;
 }
 
+interface OptionalData {
+  career: string;
+  description: string;
+}
+
+interface InformationData {
+  hasDementiaTraining: boolean;
+  toiletingAssistance: string[];
+  feedingAssistance: string[];
+  mobilityAssistance: string[];
+  dailyLivingAssistance: string[];
+  licenses: License[];
+}
+
 interface SignupData {
   loginId: string;
   password: string;
@@ -14,13 +28,8 @@ interface SignupData {
   address: string;
   hasCar: boolean;
   profileImage: File | string | null;
-  hasDementiaTraining: boolean;
-  caregiverLicense: string;
-  licenses: License[];
-  experienceServices: { [key: string]: string[] };
-  experienceServices2: { [key: string]: string[] };
-  career: string;
-  description: string;
+  information: InformationData;
+  optional: OptionalData;
 }
 
 interface SignupContextType {
@@ -39,13 +48,18 @@ export const SignupProvider = ({ children }: { children: React.ReactNode }) => {
     address: '',
     hasCar: false,
     profileImage: null,
-    hasDementiaTraining: true,
-    caregiverLicense: '',
-    licenses: [],
-    experienceServices: {},
-    experienceServices2: {},
-    career: 'NO_EXPERIENCE',
-    description: '',
+    information: {
+      hasDementiaTraining: true,
+      toiletingAssistance: [],
+      feedingAssistance: [],
+      mobilityAssistance: [],
+      dailyLivingAssistance: [],
+      licenses: [],
+    },
+    optional: {
+      career: 'NONE',
+      description: '',
+    },
   });
 
   return <SignupContext.Provider value={{ signupData, setSignupData }}>{children}</SignupContext.Provider>;
