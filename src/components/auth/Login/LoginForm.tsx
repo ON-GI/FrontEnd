@@ -1,5 +1,5 @@
 import { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import useLogin from './useLogin';
 
@@ -8,10 +8,11 @@ import useLoginForm from './useLoginForm';
 import BaseButton from '../../common/BaseButton';
 
 const LoginForm = () => {
-  const { userId, password, handlePasswordChange, handleUserIdChange, isFormValid } = useLoginForm();
-  const { mutate, error, isError } = useLogin();
+  const [searchParams] = useSearchParams();
+  const q = searchParams.get('q')!;
 
-  console.log(userId);
+  const { userId, password, handlePasswordChange, handleUserIdChange, isFormValid } = useLoginForm();
+  const { mutate, error, isError } = useLogin(q === 'caregiver' ? 'ROLE_CAREGIVER' : 'ROLE_CENTER');
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +52,7 @@ const LoginForm = () => {
       <div>
         <p className="mb-4 text-center text-gray-900">
           아직 회원이 아니신가요?{' '}
-          <Link to="sign-up" className="text-primary-400">
+          <Link to={q === 'caregiver' ? '/signup/caregiver/step1' : '/adminSignup/step1'} className="text-primary-400">
             회원가입 하기
           </Link>
         </p>

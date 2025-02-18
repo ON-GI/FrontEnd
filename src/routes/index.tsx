@@ -18,6 +18,10 @@ import MatchingComplete from '../matching/components/MatchingComplete';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
+import WorkLocationForm from './pages/work-condition/WorkLocationForm';
+import WorkScheduleForm from './pages/work-condition/WorkScheduleForm';
+import WorkConditionPage from './pages/work-condition/WorkConditionPage';
+import WorkConditionConfirm from './pages/work-condition/WorkConditionConfirm';
 
 import AdminSignupStep1 from '../adminSignup/pages/AdminSignup_IdPassword';
 import AdminSignupStep2 from '../adminSignup/pages/AdminSignup_ChoiceRole';
@@ -47,7 +51,6 @@ const MatchingLayout = () => (
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/login', element: <Login /> },
-
   {
     path: '/signup/caregiver',
     element: <CaregiverSignupLayout />,
@@ -83,6 +86,25 @@ const router = createBrowserRouter([
       { path: 'adjustment', element: <AdjustForm /> },
       { path: 'qualification', element: <QualificationForm /> },
       { path: 'completed', element: <MatchingComplete /> },
+    ],
+  },
+  {
+    path: '/work-condition',
+    element: <WorkConditionPage />,
+    children: [
+      {
+        index: true,
+        path: 'location',
+        element: <WorkLocationForm />,
+      },
+      {
+        path: 'schedule',
+        element: <WorkScheduleForm />,
+      },
+      {
+        path: 'confirm',
+        element: <WorkConditionConfirm />,
+      },
     ],
   },
 ]);

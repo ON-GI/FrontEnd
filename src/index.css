@@ -1,12 +1,19 @@
 @import 'tailwindcss';
 
+* {
+  scrollbar-width: none;
+}
+
 body {
   min-height: 100svh;
   font-family: 'Pretendard Variable';
+  background-color: #f4faf5;
 }
 
 #root {
   min-height: 100svh;
+  margin: 0 auto;
+  background-color: white;
 }
 @theme {
   --color-primary-50: #f4faf5;
@@ -23,6 +30,7 @@ body {
 
   --color-gray-50: #f5f5f5;
   --color-gray-100: #e7e7e7;
+  --color-gray-150: #f2f2f2;
   --color-gray-200: #d1d1d1;
   --color-gray-300: #bdbdbd;
   --color-gray-400: #a8a8a8;
