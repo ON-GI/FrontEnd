@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { useSignupContext } from '../store/SignupContext';
+import client from '../../api/instnace';
 
 const StepIdPassword = () => {
   const navigate = useNavigate();
@@ -9,11 +10,11 @@ const StepIdPassword = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [touched, setTouched] = useState({ loginId: false, password: false, confirmPassword: false });
-  const [isIdConfirmed, setIsIdConfirmed] = useState(false); // ✅ 중복 확인 기능 제거
+  const [isIdConfirmed, setIsIdConfirmed] = useState(false);
+  const [idCheckMessage, setIdCheckMessage] = useState<string | null>(null);
   const { signupData, setSignupData } = useSignupContext();
 
   const isValidLoginId = (id: string) => /^[a-zA-Z0-9]{4,12}$/.test(id);
-
   const isValidPassword = (pwd: string) => /^[a-zA-Z0-9]{4,8}$/.test(pwd);
 
   const isLoginIdValid = isValidLoginId(loginId);
@@ -21,37 +22,53 @@ const StepIdPassword = () => {
   const isPasswordMatch = password === confirmPassword;
   const isNextDisabled = !(isLoginIdValid && isPasswordValid && isPasswordMatch && isIdConfirmed);
 
-  // 중복 확인 버튼 클릭 시 (서버 요청 없이 로컬 상태만 변경)
-  const handleIdConfirm = () => {
-    if (isLoginIdValid) {
-      setIsIdConfirmed(true);
+  // 중복 확인 API 요청 함수 (서버 배포 전이라 임시로 항상 성공 처리)
+  const handleIdConfirm = async () => {
+    if (!isLoginIdValid) return;
+
+    try {
+      // API URL을 환경 변수에서 가져와서 사용
+      const response = await client.post(`/caregiver/validate-id`, { loginId });
+
+      if (response.data.message === 'success') {
+        setIsIdConfirmed(true);
+        setIdCheckMessage('사용 가능한 아이디입니다!');
+      } else if (response.data.errorCode === '400') {
+        setIsIdConfirmed(false);
+
+        // 오류 메시지에 따라 다르게 설정
+        if (response.data.message.includes('이미 존재하는')) {
+          setIdCheckMessage('이미 존재하는 아이디입니다.');
+        } else if (response.data.message.includes('입력해 주세요')) {
+          setIdCheckMessage('아이디를 입력해 주세요.');
+        } else {
+          setIdCheckMessage(response.data.message || '아이디 중복 확인에 실패했습니다.');
+        }
+      }
+    } catch (error) {
+      console.error('중복 확인 요청 오류:', error);
     }
   };
 
   // 다음 페이지 이동
   const handleNext = () => {
-    // 현재 URL을 확인하여 'caregiver' 또는 'admin'을 자동으로 감지
-    const basePath = window.location.pathname.includes('admin') ? '/signup/admin' : '/signup/caregiver';
-
     setSignupData({
       ...signupData,
       loginId,
       password,
     });
-
-    navigate(`${basePath}/step2`); // 경로를 caregiver/admin에 맞게 설정
+    navigate(`/caregiver/signup/step2`);
   };
 
   return (
     <div className="flex min-h-screen flex-col justify-between px-6 pb-6">
-      {/* 타이틀 */}
+      {/* 제목 */}
       <div className="mx-auto mt-10 w-full max-w-md">
         <h1 className="mb-6 text-left text-xl leading-tight font-bold text-gray-900">
           사용하실 아이디와 <br /> 비밀번호를 적어주세요.
-          <br /> 서버 api만들어지면 중복검사 코드 변경하기.
         </h1>
 
-        {/* 아이디 */}
+        {/* 아이디 입력 */}
         <div className="flex gap-2">
           <input
             type="text"
@@ -60,6 +77,7 @@ const StepIdPassword = () => {
             onChange={(e) => {
               setLoginId(e.target.value);
               setIsIdConfirmed(false); // 아이디 수정 시 중복확인 상태 초기화
+              setIdCheckMessage(null); // 메시지도 초기화
             }}
             onBlur={() => setTouched({ ...touched, loginId: true })}
             className={`focus:border-primary-500 flex-1 rounded-md border px-4 py-3 text-left placeholder-gray-400 focus:outline-none ${
@@ -81,11 +99,10 @@ const StepIdPassword = () => {
           )}
         </div>
 
-        {/* 아이디 검증 결과 메시지 */}
-        {touched.loginId && loginId && !isLoginIdValid && (
-          <p className="mt-1 text-sm text-red-500">영문, 숫자 조합 / 최소 4자, 최대 12자로 입력해주세요!</p>
+        {/* 아이디 중복 확인 결과 메시지 */}
+        {idCheckMessage && (
+          <p className={`mt-1 text-sm ${isIdConfirmed ? 'text-green-600' : 'text-red-500'}`}>{idCheckMessage}</p>
         )}
-        {isIdConfirmed && <p className="text-primary-500 mt-1 text-sm">사용가능한 아이디입니다!</p>}
 
         {/* 비밀번호 */}
         <div className="mt-4">

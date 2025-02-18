@@ -26,31 +26,38 @@ import AdminSignupStep4 from '../adminSignup/pages/AdminSignup_CenterDirector2';
 import AdminSignupStep5 from '../adminSignup/pages/AdminSignup_CenterMember';
 import AdminSignupComplete from '../adminSignup/pages/AdminSignup_Complete';
 
-const CaregiverSignupLayout = () => (
+import AdminMainPages from '../adminPages/pages/Admin_MainPage';
+import AdminMatchingInfo from '../adminPages/pages/Admin_MatchingInfo';
+import AdminMatchingFiltering from '../adminPages/pages/Admin_MatchingFiltering';
+
+const CaregiverLayout = () => (
   <SignupProvider>
     <Outlet />
   </SignupProvider>
 );
 
-const AdminSignupLayout = () => (
+const CenterLayout = () => (
   <AdminSignupProvider>
     <Outlet />
   </AdminSignupProvider>
 );
 
-const MatchingLayout = () => (
+const CaregiverMatchingLayout = () => (
   <MatchingProvider>
     <Outlet />
   </MatchingProvider>
 );
 
+const CenterPagesLayout = () => <Outlet />;
+
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/login', element: <Login /> },
 
+  // 요양보호사 회원가입
   {
-    path: '/signup/caregiver',
-    element: <CaregiverSignupLayout />,
+    path: '/caregiver/signup',
+    element: <CaregiverLayout />,
     children: [
       { path: 'step1', element: <StepIdPassword /> },
       { path: 'step2', element: <StepBasicInfo /> },
@@ -62,9 +69,22 @@ const router = createBrowserRouter([
     ],
   },
 
+  // 요양보호사 매칭
   {
-    path: '/adminSignup',
-    element: <AdminSignupLayout />,
+    path: '/caregiver/matching',
+    element: <CaregiverMatchingLayout />,
+    children: [
+      { path: 'elderly-info', element: <ElderlyInfo /> },
+      { path: 'adjustment', element: <AdjustForm /> },
+      { path: 'qualification', element: <QualificationForm /> },
+      { path: 'completed', element: <MatchingComplete /> },
+    ],
+  },
+
+  // 관리자 회원가입
+  {
+    path: '/center/signup',
+    element: <CenterLayout />,
     children: [
       { path: 'step1', element: <AdminSignupStep1 /> },
       { path: 'step2', element: <AdminSignupStep2 /> },
@@ -75,18 +95,19 @@ const router = createBrowserRouter([
     ],
   },
 
+  // 관리자 페이지
   {
-    path: '/matching',
-    element: <MatchingLayout />,
+    path: '/center',
+    element: <CenterPagesLayout />,
     children: [
-      { path: 'elderly-info', element: <ElderlyInfo /> },
-      { path: 'adjustment', element: <AdjustForm /> },
-      { path: 'qualification', element: <QualificationForm /> },
-      { path: 'completed', element: <MatchingComplete /> },
+      { index: true, element: <AdminMainPages /> }, // 기본 관리자 메인 페이지
+      { path: 'matching-info', element: <AdminMatchingInfo /> },
+      { path: 'matching-filtering', element: <AdminMatchingFiltering /> },
     ],
   },
 ]);
 
+// 📌 `RouterProvider`로 전체 라우트 적용
 export default function Router() {
   return <RouterProvider router={router} />;
 }

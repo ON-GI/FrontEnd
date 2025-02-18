@@ -3,8 +3,7 @@ import { useSignupContext } from '../store/SignupContext';
 import { useNavigate } from 'react-router-dom';
 
 const CAREER_OPTIONS = [
-  { label: '아직 경력이 없어요', value: 'NO_EXPERIENCE' },
-  { label: '나중에 입력할래요', value: 'LATER' },
+  { label: '경력 없음', value: 'NONE' },
   { label: '1년 이하', value: 'LESS_THAN_ONE_YEAR' },
   { label: '1년 ~ 3년 미만', value: 'ONE_TO_THREE_YEARS' },
   { label: '3년 ~ 5년 미만', value: 'THREE_TO_FIVE_YEARS' },
@@ -15,36 +14,43 @@ const StepOptionalInfo = () => {
   const { signupData, setSignupData } = useSignupContext();
   const navigate = useNavigate();
 
-  const [career, setCareer] = useState(signupData.career || 'NO_EXPERIENCE');
-  const [description, setDescription] = useState(signupData.description || '');
+  const [career, setCareer] = useState(signupData.optional?.career || 'NONE');
+  const [description, setDescription] = useState(signupData.optional?.description || '');
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length <= 40) {
       setDescription(e.target.value);
     }
   };
+
   const handleComplete = (skip = false) => {
-    // 현재 URL을 확인하여 'caregiver' 또는 'admin'을 자동으로 감지
-    const basePath = window.location.pathname.includes('admin') ? '/signup/admin' : '/signup/caregiver';
+    // ✅ 기존 데이터 유지하면서 optional 내부 정보만 업데이트
+    const updatedData = {
+      ...signupData, // 기존 signupData 유지
+      optional: {
+        ...signupData.optional, // 기존 optional 내부 데이터 유지
+        career: skip ? '' : career, // 선택한 career 업데이트
+        description: skip ? '' : description, // 선택한 description 업데이트
+      },
+    };
 
-    setSignupData((prev) => ({
-      ...prev,
-      career: skip ? '' : career, //"다음에 하기"를 누르면 공백으로 보냄
-      description: skip ? '' : description, //"다음에 하기"를 누르면 공백으로 보냄
-    }));
+    // 🔹 이전에 저장된 signupData 확인
+    console.log('🔹 이전 signupData:', signupData);
 
-    navigate(`${basePath}/step5`); // 경로를 caregiver/admin에 맞게 설정
+    // 🔹 업데이트될 데이터 확인
+    console.log('✅ 최종 저장되는 데이터:', updatedData);
+
+    setSignupData(updatedData);
+    navigate(`/caregiver/signup/step5`);
   };
 
   return (
     <div className="flex min-h-screen flex-col justify-between px-6 pb-6">
       <div className="mx-auto mt-10 w-full max-w-md">
-        {/* 제목 */}
         <h2 className="mb-4 text-left text-xl leading-tight font-bold text-gray-900">
           여기서부터는 <br /> 선택 입력 사항들이에요
         </h2>
 
-        {/* 경력 기간 선택 */}
         <div className="mb-4 text-left">
           <label className="block text-sm font-semibold text-gray-900">경력 기간</label>
           <div className="mt-2 grid grid-cols-2 gap-2">
@@ -77,31 +83,26 @@ const StepOptionalInfo = () => {
           </div>
         </div>
 
-        {/* 한 줄 소개 입력 */}
         <div className="mb-4 text-left">
           <label className="block text-sm font-semibold text-gray-900">한 줄 소개</label>
           <textarea
             placeholder="간단한 자기 소개를 입력해주세요."
             value={description}
             onChange={handleDescriptionChange}
-            maxLength={40} //최대 40자 입력 제한
+            maxLength={40}
             className="focus:border-primary-500 mt-2 w-full rounded-md border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none"
             rows={3}
           />
         </div>
       </div>
 
-      {/* 버튼 */}
       <div className="mx-auto flex w-full max-w-md gap-2">
-        {/* 다음에 하기 버튼 (1/3 크기, 회색 배경) */}
         <button
           onClick={() => handleComplete(true)}
           className="w-1/3 rounded-md border border-gray-300 bg-gray-300 px-4 py-3 font-semibold text-gray-700"
         >
           다음에 하기
         </button>
-
-        {/* 입력 완료 버튼 (2/3 크기, 활성화/비활성화 스타일) */}
         <button
           onClick={() => handleComplete()}
           disabled={!description.trim()}

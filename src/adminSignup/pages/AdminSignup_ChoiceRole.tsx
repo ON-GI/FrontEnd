@@ -16,9 +16,9 @@ const AdminSignupStep2 = () => {
     setAdminSignupData({ ...adminSignupData, role: selectedRole });
 
     if (selectedRole === '센터장') {
-      navigate('/adminSignup/step3'); // 센터장 정보 입력 페이지로 이동
+      navigate('/center/signup/step3'); // 센터장 정보 입력 페이지로 이동
     } else if (selectedRole === '사회복지사') {
-      navigate('/adminSignup/step5'); // 사회복지사 센터코드 입력 페이지로 이동
+      navigate('/center/signup/step5'); // 사회복지사 센터코드 입력 페이지로 이동
     }
   };
 
