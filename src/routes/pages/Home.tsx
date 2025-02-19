@@ -1,12 +1,32 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuthStore from '../../store/useAuthStore';
+import { getCookie } from '../../utils/cookie';
 
 const Home = () => {
+  const { isLoggedIn, logout } = useAuthStore();
+  const token = getCookie('accessToken');
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (token === undefined) {
+      logout();
+      return;
+    } else if (isLoggedIn === 'ROLE_CAREGIVER') {
+      navigate(`/caregiver`);
+    } else if (isLoggedIn === 'ROLE_CENTER') {
+      navigate('/center');
+    }
+  }, []);
+
   const LinkStyle = 'flex w-full items-center gap-2 rounded-xl';
   const ButtonDesc = 'mb-2 text-xl font-medium text-gray-950';
   return (
     <main className="flex min-h-[100svh] flex-col justify-between">
       <div className="mt-20 text-center">
-        <h1>로고 영역</h1>
+        <h1>
+          <img src="src/assets/Logo_text.png" alt="로고" />
+        </h1>
       </div>
       <div className="space-y-4 p-5">
         {/* 요양보호사용 */}
@@ -21,7 +41,7 @@ const Home = () => {
         </Link>
 
         {/* 관리자용 */}
-        <Link to="/login?q=admin" className={`${LinkStyle} bg-[#EEF6FF]`}>
+        <Link to="/login?q=center" className={`${LinkStyle} bg-[#EEF6FF]`}>
           <div>
             <img src="src\assets\images\image1.png" alt="요양보호사 이미지" />
           </div>
