@@ -93,7 +93,7 @@ const StepExperienceServices = () => {
       feedingAssistance,
     });
 
-    navigate(`/caregiver/signup/step6`);
+    navigate(`/signup/caregiver/step6`);
   };
 
   return (

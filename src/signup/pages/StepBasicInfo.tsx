@@ -44,7 +44,7 @@ const StepBasicInfo = () => {
       hasCar,
       profileImage,
     });
-    navigate(`/caregiver/signup/step3`);
+    navigate(`/signup/caregiver/step3`);
   };
 
   return (

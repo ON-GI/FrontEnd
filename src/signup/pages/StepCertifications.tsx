@@ -146,7 +146,7 @@ const StepCertifications = () => {
       },
     });
 
-    navigate(`/caregiver/signup/step4`);
+    navigate(`/signup/caregiver/step4`);
   };
 
   return (
