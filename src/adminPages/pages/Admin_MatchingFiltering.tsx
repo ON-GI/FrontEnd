@@ -56,7 +56,7 @@ const MatchingRequestList = () => {
     selectedCategory === 'all' ? dummyData : dummyData.filter((item) => item.status === selectedCategory);
 
   return (
-    <div className="mx-auto w-full max-w-md px-6">
+    <div className="mx-auto h-full w-full p-5">
       {/* 제목 */}
       <h2 className="text-center text-xl font-bold text-gray-900">매칭 요청 목록 조회</h2>
 
@@ -65,8 +65,8 @@ const MatchingRequestList = () => {
         {categories.map((category) => (
           <button
             key={category.key}
-            className={`flex-shrink-0 rounded-full px-4 py-2 text-sm font-semibold ${
-              selectedCategory === category.key ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'
+            className={`flex-shrink-0 rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
+              selectedCategory === category.key ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-700'
             }`}
             onClick={() => setSelectedCategory(category.key)}
           >
@@ -80,7 +80,7 @@ const MatchingRequestList = () => {
         {filteredData.map((match) => (
           <div
             key={match.id}
-            className={`relative w-full max-w-md rounded-lg p-4 shadow-md ${
+            className={`relative w-full rounded-lg p-4 shadow-md ${
               match.status === 'unconfirmed' ? 'bg-green-50' : 'bg-white'
             }`}
           >
@@ -107,7 +107,9 @@ const MatchingRequestList = () => {
             </p>
 
             {/* 상세 확인 버튼 */}
-            <button className="mt-3 w-full rounded-md bg-green-600 py-2 text-white shadow-md">상세 내용 확인 →</button>
+            <button className="bg-primary-500 mt-3 w-full rounded-md py-2 text-white shadow-md">
+              상세 내용 확인 →
+            </button>
           </div>
         ))}
       </div>

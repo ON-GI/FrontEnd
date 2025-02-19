@@ -41,7 +41,7 @@ const StepOptionalInfo = () => {
     console.log('✅ 최종 저장되는 데이터:', updatedData);
 
     setSignupData(updatedData);
-    navigate(`/caregiver/signup/step5`);
+    navigate(`/signup/caregiver/step5`);
   };
 
   return (

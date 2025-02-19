@@ -100,7 +100,7 @@ const StepExperienceServices_2 = () => {
     // 🔹 기존 signupData의 information에 추가
     setSignupData(updatedData);
 
-    navigate(`/caregiver/signup/complete`);
+    navigate(`/signup/caregiver/complete`);
   };
 
   return (

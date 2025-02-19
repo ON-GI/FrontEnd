@@ -1,23 +1,39 @@
-import { FormEvent } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-
-import useLogin from './useLogin';
+import { FormEvent, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import BaseInput from '../../common/BaseInput';
 import useLoginForm from './useLoginForm';
 import BaseButton from '../../common/BaseButton';
+import onLogin from '../../../api/Auth/Login';
+import useAuthStore from '../../../store/useAuthStore';
 
 const LoginForm = () => {
+  const { login } = useAuthStore();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [error, setError] = useState('');
   const q = searchParams.get('q')!;
+  console.log(error);
+  const authority = q === 'caregiver' ? 'ROLE_CAREGIVER' : 'ROLE_CENTER';
 
   const { userId, password, handlePasswordChange, handleUserIdChange, isFormValid } = useLoginForm();
-  const { mutate, error, isError } = useLogin(q === 'caregiver' ? 'ROLE_CAREGIVER' : 'ROLE_CENTER');
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    mutate({ id: userId, password: password });
+    try {
+      const response = await onLogin({ id: userId, password: password, authority });
+      if (response === 200) {
+        login(authority);
+        navigate(`/${q}`);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError(String(error));
+      }
+    }
   };
 
   return (
@@ -38,8 +54,8 @@ const LoginForm = () => {
           />
 
           <BaseInput
-            inputState={isError ? 'invalid' : 'default'}
-            error={error?.message}
+            inputState={error ? 'invalid' : 'default'}
+            error={error}
             onChange={handlePasswordChange}
             value={password}
             type="password"

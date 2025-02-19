@@ -57,7 +57,7 @@ const StepIdPassword = () => {
       loginId,
       password,
     });
-    navigate(`/caregiver/signup/step2`);
+    navigate(`/signup/caregiver/step2`);
   };
 
   return (

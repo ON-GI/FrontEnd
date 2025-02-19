@@ -28,7 +28,7 @@ const Completed = () => {
 
   const handleConfirm = () => {
     submitDataToServer(); // 서버 전송
-    navigate('/'); // 메인 페이지로 이동
+    navigate('/caregiver'); // 메인 페이지로 이동
   };
 
   return (

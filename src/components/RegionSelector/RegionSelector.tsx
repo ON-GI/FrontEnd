@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import regions from '../../data/regions';
 import { WorkRegions } from '../../types/workCondition';
-
+import { WorkRegions as Regions } from '../../types/senior/seniorRegister';
 import closeButton from '../../assets/close.png';
 
 interface Subregion {
@@ -24,9 +24,13 @@ interface Town {
 const RegionSelector = ({
   onSubmit,
   defaultValues,
+  maximum = 5,
+  onClickBackButton,
 }: {
   onSubmit: (workRegions: WorkRegions[]) => void;
-  defaultValues?: WorkRegions[];
+  defaultValues?: WorkRegions[] | Regions[];
+  maximum?: number;
+  onClickBackButton?: () => void;
 }) => {
   const [city, setCity] = useState<Region>(regions[0]); // 기본값은 서울
   const [district, setDistrict] = useState<Subregion | null>();
@@ -61,7 +65,7 @@ const RegionSelector = ({
         });
 
     //   최대 5개까지만 선택 가능
-    if (updatedValues.length > 5 && 5) return;
+    if (updatedValues.length > maximum && maximum) return;
 
     // 배열로 전달
     setSelectList(updatedValues);
@@ -142,7 +146,7 @@ const RegionSelector = ({
 
       <div className="flex min-h-[192px] w-full flex-col justify-between gap-4 bg-white p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.12)]">
         <p>
-          <span className="text-primary-400">최대 5개</span>까지 선택할 수 있어요
+          <span className="text-primary-400">{`최대 ${maximum}개`}</span>까지 선택할 수 있어요
         </p>
         <ul className="flex gap-2 overflow-x-scroll whitespace-nowrap">
           {selectList.map((value) => (
@@ -155,7 +159,9 @@ const RegionSelector = ({
           ))}
         </ul>
         <div className="flex gap-4">
-          <button className="bg-gray-150 w-[25%] rounded-lg py-3">뒤로가기</button>
+          <button onClick={onClickBackButton} className="bg-gray-150 w-[25%] cursor-pointer rounded-lg py-3">
+            뒤로가기
+          </button>
           <button
             disabled={selectList.length < 1}
             onClick={() => onSubmit(selectList)}

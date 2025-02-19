@@ -1,11 +1,11 @@
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 
-import { PlaceHolderInput } from '../../../components/common/PlaceHolderInput';
-import SelectPayType from '../../../components/WorkConditionForm/SelectPayType';
-import SimpleScheduleForm from '../../../components/WorkConditionForm/WorkScheduleForm/SimpleScheduleForm';
-import DetailScheduleForm from '../../../components/WorkConditionForm/WorkScheduleForm/DetailScheduleForm';
-import { WorkConditionContext } from '../../../components/WorkConditionForm/WorkConditionFormProvider';
-import { PayType } from '../../../types/workCondition';
+import { PlaceHolderInput } from '../../../../components/common/PlaceHolderInput';
+import SelectPayType from '../../../../components/WorkConditionForm/SelectPayType';
+import SimpleScheduleForm from '../../../../components/WorkConditionForm/WorkScheduleForm/SimpleScheduleForm';
+import DetailScheduleForm from '../../../../components/WorkConditionForm/WorkScheduleForm/DetailScheduleForm';
+import { WorkConditionContext } from '../../../../components/WorkConditionForm/WorkConditionFormProvider';
+import { PayType } from '../../../../types/workCondition';
 import { useNavigate } from 'react-router-dom';
 
 export interface WorkTime {
@@ -76,7 +76,6 @@ const WorkScheduleForm = () => {
             className="text-primary-400 mt-4 inline-flex cursor-pointer items-center gap-2 font-medium"
           >
             {timeFormType === 'detail' ? '간단하게 입력할래요' : '더 자세하게 입력할래요'}
-            <img src="../src/assets/primary_right-arrow.png" alt="화살표" className="inline" />
           </span>
         </div>
 
@@ -107,14 +106,14 @@ const WorkScheduleForm = () => {
 
       <div className="flex gap-4">
         <button
-          onClick={() => navigate('/work-condition/location')}
+          onClick={() => navigate('/caregiver/work-conditions/location')}
           className="bg-gray-150 w-[25%] cursor-pointer rounded-lg py-3"
         >
           뒤로가기
         </button>
         <button
           disabled={!formValid}
-          onClick={() => navigate('/work-condition/confirm')}
+          onClick={() => navigate('/caregiver/work-conditions/confirm')}
           className="bg-primary-400 disabled:bg-primary-200 w-[75%] cursor-pointer rounded-lg py-3 text-white transition-colors disabled:cursor-auto"
         >
           입력완료

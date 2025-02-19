@@ -1,10 +1,11 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { WorkConditionContext } from '../../../components/WorkConditionForm/WorkConditionFormProvider';
+import { WorkConditionContext } from '../../../../components/WorkConditionForm/WorkConditionFormProvider';
 
-import Information from '../../../components/common/Information/Information';
+import Information from '../../../../components/common/Information/Information';
 import { useMutation } from '@tanstack/react-query';
+import client from '../../../../api/instnace';
 
 const formatWorkTime = ({
   dayOfWeek,
@@ -29,13 +30,33 @@ const formatWorkTime = ({
   return `${koreanDay}요일 ${startTime}~${endTime}`;
 };
 
+const formattingPayType = (value: string) => {
+  if (value === '일급') {
+    return 'DAILY';
+  } else if (value === '시급') {
+    return 'HOURLY';
+  } else if (value === '월급') {
+    return 'MONTHLY';
+  }
+};
+
 const WorkConditionConfirm = () => {
   const navigate = useNavigate();
 
   const { workConditions } = useContext(WorkConditionContext);
 
   const { mutate } = useMutation({
-    mutationFn: async () => {},
+    mutationFn: async () => {
+      const response = await client.post('/caregiver/work-condition', {
+        ...workConditions,
+        payType: formattingPayType(workConditions.payType),
+        payAmount: Number(workConditions.payAmount.replace(/,/g, '')),
+      });
+      console.log(response);
+    },
+    onSuccess: () => {
+      navigate('/caregiver/work-conditions/complete');
+    },
   });
 
   // workConditions 정보가 없을 때
@@ -84,12 +105,15 @@ const WorkConditionConfirm = () => {
       </div>
       <div className="flex gap-4">
         <button
-          onClick={() => navigate('/work-condition/schedule')}
+          onClick={() => navigate('/caregiver/work-conditions/schedule')}
           className="bg-gray-150 w-[25%] cursor-pointer rounded-lg py-3"
         >
           뒤로가기
         </button>
-        <button className="bg-primary-400 disabled:bg-primary-200 w-[75%] cursor-pointer rounded-lg py-3 text-white transition-colors disabled:cursor-auto">
+        <button
+          onClick={() => mutate()}
+          className="bg-primary-400 disabled:bg-primary-200 w-[75%] cursor-pointer rounded-lg py-3 text-white transition-colors disabled:cursor-auto"
+        >
           위 정보가 맞아요
         </button>
       </div>
