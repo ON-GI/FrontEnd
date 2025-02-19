@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 const MatchingPending = () => {
   const dummyData = Array(5).fill({
     name: '김OO 어르신',
@@ -10,14 +8,15 @@ const MatchingPending = () => {
   });
 
   return (
-    <div className="mx-auto mt-6 w-full max-w-md px-6">
-      <h2 className="text-xl font-bold text-gray-900">
-        확인하지 않은 <br /> <span className="text-green-600">매칭 {dummyData.length}건</span>
+    <div className="w-full p-5">
+      <h2 className="mb-7 text-2xl font-bold text-gray-900">
+        확인하지 않은 <br />
+        매칭 <span className="text-green-600">{dummyData.length}건</span>
       </h2>
 
-      <div className="mt-4 space-y-4">
+      <div className="w-full space-y-4">
         {dummyData.map((match, index) => (
-          <div key={index} className="w-full max-w-md rounded-lg bg-green-50 p-4 shadow-md">
+          <div key={index} className="w-full rounded-lg bg-green-50 p-4 shadow-md">
             <p className="text-lg font-semibold">{match.name}</p>
             <p className="text-sm text-gray-700">
               <span className="font-semibold">근무요일</span> {match.schedule}
@@ -32,7 +31,7 @@ const MatchingPending = () => {
               <span className="font-semibold">시급</span> {match.hourlyWage.toLocaleString()}원
             </p>
 
-            <button className="mt-3 w-[90%] rounded-md bg-green-600 py-2 text-white shadow-md">상세 내용 확인 →</button>
+            <button className="mt-3 w-full rounded-md bg-green-600 py-2 text-white shadow-md">상세 내용 확인 →</button>
           </div>
         ))}
       </div>
