@@ -6,14 +6,20 @@ import { useRef, useEffect } from 'react';
 
 const LICENSE_OPTIONS = ['사회복지사 자격증', '간호조무사 자격증'];
 
+const LICENSE_NAME_MAP: { [key: string]: string } = {
+  '요양보호사 자격증': 'CAREGIVER',
+  '사회복지사 자격증': 'SOCIAL_WORKER',
+  '간호조무사 자격증': 'NURSE_AIDE',
+};
+
 const StepCertifications = () => {
   const { signupData, setSignupData } = useSignupContext();
   const navigate = useNavigate();
   const dropdownRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const [licenses, setLicenses] = useState(
-    signupData.licenses && signupData.licenses.length > 0
-      ? signupData.licenses
+    signupData.information?.licenses?.length > 0
+      ? signupData.information.licenses
       : [{ licenseName: '', licenseGrade: '', licenseNumber: '' }],
   );
 
@@ -33,7 +39,11 @@ const StepCertifications = () => {
   }, [licenses.length]);
 
   //요양보호사 자격증
-  const [caregiverLicense, setCaregiverLicense] = useState(signupData.caregiverLicense || '');
+  // 요양보호사 자격증 객체를 찾아서 가져오기
+  const caregiverLicenseObj = signupData.information?.licenses.find(
+    (license) => license.licenseName === '요양보호사 자격증',
+  );
+  const [caregiverLicense, setCaregiverLicense] = useState(caregiverLicenseObj?.licenseNumber || '');
   const [isValidLicense, setIsValidLicense] = useState(false);
 
   const toggleDropdown = (index: number) => {
@@ -41,7 +51,7 @@ const StepCertifications = () => {
   };
 
   //치매 교육 이수 여부
-  const [hasDementiaTraining, setHasDementiaTraining] = useState(signupData.hasDementiaTraining || false);
+  const [hasDementiaTraining, setHasDementiaTraining] = useState(signupData.information?.hasDementiaTraining || false);
 
   //드롭다운 활성화 여부
   const [dropdownOpenList, setDropdownOpenList] = useState<boolean[]>(Array(licenses.length).fill(false));
@@ -109,33 +119,34 @@ const StepCertifications = () => {
 
     return numericValue;
   };
-
   const handleNext = () => {
-    // 현재 URL을 확인하여 'caregiver' 또는 'admin'을 자동으로 감지
-    const basePath = window.location.pathname.includes('admin') ? '/signup/admin' : '/signup/caregiver';
-
-    // 추가 자격증 중 입력된 항목만 필터링 (licenseName과 licenseNumber가 비어있지 않은 것만 저장)
     const filteredLicenses = licenses.filter(
       (license) => license.licenseName.trim() !== '' && license.licenseNumber.trim() !== '',
     );
 
-    // 최종적으로 요양보호사 자격증 포함하여 저장
+    // 🔹 한글 → ENUM 변환 후 저장
     const updatedLicenses = [
       {
-        licenseName: '요양보호사 1급',
+        licenseName: LICENSE_NAME_MAP['요양보호사 자격증'], // 영어 ENUM 변환
         licenseNumber: caregiverLicense,
         licenseGrade: 'A',
       },
-      ...filteredLicenses, // 입력된 추가 자격증만 포함
+      ...filteredLicenses.map((license) => ({
+        ...license,
+        licenseName: LICENSE_NAME_MAP[license.licenseName] || license.licenseName, // ENUM 변환
+      })),
     ];
 
     setSignupData({
       ...signupData,
-      hasDementiaTraining,
-      licenses: updatedLicenses, // 최종 정리된 자격증 리스트 저장
+      information: {
+        ...signupData.information,
+        hasDementiaTraining,
+        licenses: updatedLicenses,
+      },
     });
 
-    navigate(`${basePath}/step4`); // 경로를 caregiver/admin에 맞게 설정
+    navigate(`/caregiver/signup/step4`);
   };
 
   return (

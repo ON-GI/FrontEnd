@@ -61,7 +61,7 @@ const AdminSignupStep1 = () => {
       adminId,
       adminPassword,
     });
-    navigate('/adminSignup/step2');
+    navigate('/center/signup/step2');
   };
 
   return (

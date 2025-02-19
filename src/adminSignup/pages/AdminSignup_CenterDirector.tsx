@@ -51,7 +51,7 @@ const AdminSignupStep3 = () => {
       address,
       profileImage,
     });
-    navigate('/adminSignup/step4');
+    navigate('/center/signup/step4');
   };
 
   return (

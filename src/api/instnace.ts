@@ -10,7 +10,6 @@ const client = axios.create({
     'Content-Type': `application/json`,
     Accept: '*/*',
   },
-
   withCredentials: true,
 });
 

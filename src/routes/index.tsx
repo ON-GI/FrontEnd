@@ -29,39 +29,50 @@ import AdminSignupStep3 from '../adminSignup/pages/AdminSignup_CenterDirector';
 import AdminSignupStep4 from '../adminSignup/pages/AdminSignup_CenterDirector2';
 import AdminSignupStep5 from '../adminSignup/pages/AdminSignup_CenterMember';
 import AdminSignupComplete from '../adminSignup/pages/AdminSignup_Complete';
-import CareGiverMain from './pages/caregiver/CareGiverMain';
-import CareGiverLayout from './pages/caregiver/CareGiverLayout';
-import SeniorRegisterLayout from './pages/center/senior/register/SeniorRegisterLayout';
-import SeniorRegisterBaseInfo from './pages/center/senior/register/SeniorRegisterBaseInfo';
-import SeniorRegisterLocation from './pages/center/senior/register/SeniorRegisterLocation';
-import SeniorRegisterCareTIme from './pages/center/senior/register/SeniorRegisterCareTIme';
-import SeniorRegisterCareService from './pages/center/senior/register/SeniorRegisterCareService';
-import WorkConditionComplete from './pages/caregiver/work-condition/WorkConditionComplete';
 
-const CaregiverSignupLayout = () => (
+import AdminMainPages from '../adminPages/pages/Admin_MainPage';
+import AdminMatchingInfo from '../adminPages/pages/Admin_MatchingInfo';
+import AdminMatchingFiltering from '../adminPages/pages/Admin_MatchingFiltering';
+
+import Step1 from '../adminMatching/pages/Step1';
+import Step2 from '../adminMatching/pages/Step2';
+import Step3 from '../adminMatching/pages/Step3';
+import Search from '../adminMatching/pages/Search';
+import Step5 from '../adminMatching/pages/Step5';
+import Step6 from '../adminMatching/pages/Step6';
+import Step7 from '../adminMatching/pages/Step7';
+import Complete from '../adminMatching/pages/Complete';
+
+const CaregiverLayout = () => (
   <SignupProvider>
     <Outlet />
   </SignupProvider>
 );
 
-const AdminSignupLayout = () => (
+const CenterLayout = () => (
   <AdminSignupProvider>
     <Outlet />
   </AdminSignupProvider>
 );
 
-const MatchingLayout = () => (
+const CaregiverMatchingLayout = () => (
   <MatchingProvider>
     <Outlet />
   </MatchingProvider>
 );
 
+const CenterPagesLayout = () => <Outlet />;
+
+const AdminMatchingLayout = () => <Outlet />;
+
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/login', element: <Login /> },
+
+  // 요양보호사 회원가입
   {
-    path: '/signup/caregiver',
-    element: <CaregiverSignupLayout />,
+    path: '/caregiver/signup',
+    element: <CaregiverLayout />,
     children: [
       { path: 'step1', element: <StepIdPassword /> },
       { path: 'step2', element: <StepBasicInfo /> },
@@ -72,9 +83,23 @@ const router = createBrowserRouter([
       { path: 'complete', element: <SignupComplete /> },
     ],
   },
+
+  // 요양보호사 매칭
   {
-    path: '/adminSignup',
-    element: <AdminSignupLayout />,
+    path: '/caregiver/matching',
+    element: <CaregiverMatchingLayout />,
+    children: [
+      { path: 'elderly-info', element: <ElderlyInfo /> },
+      { path: 'adjustment', element: <AdjustForm /> },
+      { path: 'qualification', element: <QualificationForm /> },
+      { path: 'completed', element: <MatchingComplete /> },
+    ],
+  },
+
+  // 관리자 회원가입
+  {
+    path: '/center/signup',
+    element: <CenterLayout />,
     children: [
       { path: 'step1', element: <AdminSignupStep1 /> },
       { path: 'step2', element: <AdminSignupStep2 /> },
@@ -85,43 +110,20 @@ const router = createBrowserRouter([
     ],
   },
 
-  // 요양 보호사
+  // 관리자 페이지
   {
-    path: '/caregiver',
-    element: <CareGiverLayout />,
+    path: '/center',
+    element: <CenterPagesLayout />,
     children: [
-      {
-        index: true,
-        element: <CareGiverMain />,
-      },
-      {
-        path: 'work-conditions',
-        element: <WorkConditionPage />,
-        children: [
-          {
-            index: true,
-            path: 'location',
-            element: <WorkLocationForm />,
-          },
-          {
-            path: 'schedule',
-            element: <WorkScheduleForm />,
-          },
-          {
-            path: 'confirm',
-            element: <WorkConditionConfirm />,
-          },
-          {
-            path: 'complete',
-            element: <WorkConditionComplete />,
-          },
-        ],
-      },
+      { index: true, element: <AdminMainPages /> }, // 기본 관리자 메인 페이지
+      { path: 'matching-info', element: <AdminMatchingInfo /> },
+      { path: 'matching-filtering', element: <AdminMatchingFiltering /> },
     ],
   },
+
   {
-    path: '/matching',
-    element: <MatchingLayout />,
+    path: '/center/matching',
+    element: <AdminMatchingLayout />,
     children: [
       { path: 'elderly-info', element: <ElderlyInfo /> },
       { path: 'adjustment', element: <AdjustForm /> },
@@ -129,42 +131,28 @@ const router = createBrowserRouter([
       { path: 'completed', element: <MatchingComplete /> },
     ],
   },
-
-  // 관리자
   {
-    path: '/center',
-    // element -> 이 자리에는 공통 레이아웃 컴포넌트가 들어갑니다 ! 필요없으시면 주석 삭제 해주세요 !
+    path: '/work-condition',
+    element: <WorkConditionPage />,
     children: [
       {
         index: true,
-        element: <Home />, // 이 자리에는 관리자용 메인페이지가 들어갑니다 !
+        path: 'location',
+        element: <WorkLocationForm />,
       },
       {
-        path: 'senior/register', // 어르신 등록 페이지
-        element: <SeniorRegisterLayout />,
-        children: [
-          {
-            path: 'basic-info',
-            element: <SeniorRegisterBaseInfo />,
-          },
-          {
-            path: 'location',
-            element: <SeniorRegisterLocation />,
-          },
-          {
-            path: 'care-time',
-            element: <SeniorRegisterCareTIme />,
-          },
-          {
-            path: 'care-service',
-            element: <SeniorRegisterCareService />,
-          },
-        ],
+        path: 'schedule',
+        element: <WorkScheduleForm />,
+      },
+      {
+        path: 'confirm',
+        element: <WorkConditionConfirm />,
       },
     ],
   },
 ]);
 
+// `RouterProvider`로 전체 라우트 적용
 export default function Router() {
   return <RouterProvider router={router} />;
 }

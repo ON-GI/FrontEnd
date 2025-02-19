@@ -17,7 +17,7 @@ const AdjustForm = () => {
       additionalRequests,
     });
 
-    navigate('/matching/qualification');
+    navigate('/caregiver/matching/qualification');
   };
 
   return (
