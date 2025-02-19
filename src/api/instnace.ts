@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from '../utils/cookie';
+import { getCookie } from '../utils/cookie/index';
 
 const accessToken = getCookie('token');
 
@@ -9,7 +9,6 @@ const client = axios.create({
     'Content-Type': `application/json`,
     Accept: '*/*',
   },
-
   withCredentials: true,
 });
 

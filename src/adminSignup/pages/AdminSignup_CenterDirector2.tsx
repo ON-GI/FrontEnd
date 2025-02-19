@@ -68,7 +68,7 @@ const AdminSignupStep4 = () => {
       operatingPeriod,
       hasVehicle,
     });
-    navigate('/adminSignup/complete');
+    navigate('/center/signup/complete');
   };
 
   return (

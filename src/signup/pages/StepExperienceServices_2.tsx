@@ -16,12 +16,42 @@ const EXPERIENCE_CATEGORIES = {
   ],
 };
 
+// 🔹 이동 보조(mobilityAssistance) - 한글 → 영어 변환 맵
+const mobilityAssistanceMap: { [key: string]: string } = {
+  '스스로 거동 가능': 'INDEPENDENT',
+  '이동시 부축 도움': 'SUPPORT_WALKING',
+  '휠체어 이동 보조': 'WHEELCHAIR_ASSIST',
+  '거동 불가': 'IMMOBILE',
+  '해당 없음': 'NOT_APPLICABLE',
+};
+
+// 🔹 일상생활 보조(dailyLivingAssistance) - 한글 → 영어 변환 맵
+const dailyLivingAssistanceMap: { [key: string]: string } = {
+  '청소, 빨래 보조': 'HOUSEKEEPING',
+  '목욕 보조': 'BATHING_ASSIST',
+  '병원 동행': 'HOSPITAL_COMPANION',
+  '산책, 간단한 운동': 'WALKING_EXERCISE',
+  '말벗 등 정서지원': 'EMOTIONAL_SUPPORT',
+  '인지자극 활동': 'COGNITIVE_STIMULATION',
+  '해당 없음': 'NOT_APPLICABLE',
+};
+
 const StepExperienceServices_2 = () => {
   const { signupData, setSignupData } = useSignupContext();
   const navigate = useNavigate();
 
   const [experienceServices2, setExperienceServices2] = useState<{ [key: string]: string[] }>(
-    signupData.experienceServices2 || {},
+    signupData.information
+      ? {
+          이동보조: signupData.information.mobilityAssistance.map(
+            (item) => Object.keys(mobilityAssistanceMap).find((key) => mobilityAssistanceMap[key] === item) || item,
+          ),
+          일상생활: signupData.information.dailyLivingAssistance.map(
+            (item) =>
+              Object.keys(dailyLivingAssistanceMap).find((key) => dailyLivingAssistanceMap[key] === item) || item,
+          ),
+        }
+      : {},
   );
 
   const toggleService = (category: string, service: string) => {
@@ -45,17 +75,32 @@ const StepExperienceServices_2 = () => {
   const isNextEnabled = Object.keys(EXPERIENCE_CATEGORIES).every(
     (category) => (experienceServices2[category] || []).length > 0,
   );
-
   const handleNext = () => {
-    // 현재 URL을 확인하여 'caregiver' 또는 'admin'을 자동으로 감지
-    const basePath = window.location.pathname.includes('admin') ? '/signup/admin' : '/signup/caregiver';
+    // 🔹 선택된 한글 값을 영어 Enum 값으로 변환
+    const mobilityAssistance = (experienceServices2['이동보조'] || []).map(
+      (item) => mobilityAssistanceMap[item] || item,
+    );
 
-    setSignupData((prev) => ({
-      ...prev,
-      experienceServices2,
-    }));
+    const dailyLivingAssistance = (experienceServices2['일상생활'] || []).map(
+      (item) => dailyLivingAssistanceMap[item] || item,
+    );
 
-    navigate(`${basePath}/complete`); // 경로를 caregiver/admin에 맞게 설정
+    const updatedData = {
+      ...signupData,
+      information: {
+        ...signupData.information,
+        mobilityAssistance,
+        dailyLivingAssistance,
+      },
+    };
+
+    // ✅ 네비게이션 전에 로그 찍기
+    console.log('업데이트된 데이터:', updatedData);
+
+    // 🔹 기존 signupData의 information에 추가
+    setSignupData(updatedData);
+
+    navigate(`/caregiver/signup/complete`);
   };
 
   return (
