@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSignupContext } from '../store/SignupContext';
 import Button from '../components/Button';
 import client from '../../api/instnace';
-import { setCookie, getCookie } from '../../utils/cookie'; // ✅ 쿠키 관리 함수 추가
+import { setCookie, getCookie } from '../../utils/cookie';
 
 const SignupComplete = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const SignupComplete = () => {
       },
     };
 
-    console.log('📤 회원가입 요청 데이터:', JSON.stringify(requestBody, null, 2));
+    console.log('회원가입 요청 데이터:', JSON.stringify(requestBody, null, 2));
 
     try {
       const response = await client.post('/caregiver/signup', requestBody, {
@@ -50,7 +50,7 @@ const SignupComplete = () => {
         },
       });
 
-      console.log('✅ 회원가입 응답 데이터:', response.data);
+      console.log('회원가입 응답 데이터:', response.data);
 
       if (response.data?.data?.caregiverId && response.data?.data?.accessToken) {
         const caregiverId = response.data.data.caregiverId;
@@ -129,7 +129,7 @@ const SignupComplete = () => {
 
   // "확인" 버튼 클릭 시 회원가입 진행
   const handleSubmit = async () => {
-    console.log('🚀 회원가입 진행 시작');
+    console.log('회원가입 진행 시작');
     await sendSignupData();
   };
 
