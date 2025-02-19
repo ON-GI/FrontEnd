@@ -50,6 +50,20 @@ import SeniorRegisterBaseInfo from './pages/center/senior/register/SeniorRegiste
 import SeniorRegisterLocation from './pages/center/senior/register/SeniorRegisterLocation';
 import SeniorRegisterCareTIme from './pages/center/senior/register/SeniorRegisterCareTIme';
 import SeniorRegisterCareService from './pages/center/senior/register/SeniorRegisterCareService';
+import SeniorRegisterNursingGrade from './pages/center/senior/register/SeniorRegisterNursingGrade';
+import SeniorRegisterSymptoms from './pages/center/senior/register/SeniorRegisterSymptoms';
+import SeniorRegisterCohabitant from './pages/center/senior/register/SeniorRegisterCohabitant';
+import SeniorRegisterStaffContact from './pages/center/senior/register/SeniorRegisterStaffContact';
+import SeniorInfoPage from './pages/center/senior/SeniorInfoPage';
+import SeniorDetailInfoPage from './pages/center/senior/SeniorDetailInfoPage';
+import SeniorRegisterComplete from './pages/center/senior/register/SeniorRegisterComplete';
+import MatchingResult from './pages/center/matching/MatchingResult';
+import MatchingCondition from './pages/center/matching/MatchingCondition';
+import MatchingCoordinate from './pages/center/matching/MatchingCoordinate';
+import MatchingResultComplete from './pages/center/matching/MatchingResultComplete';
+import MatchingFailed from './pages/center/matching/MatchingFailed';
+import MatchingResultCoordinate from './pages/center/matching/MatchingResultCoordinate';
+import MatchingResultCoordinateComplete from './pages/center/matching/MatchingResultCoordinateComplete';
 
 const CaregiverLayout = () => (
   <SignupProvider>
@@ -177,6 +191,14 @@ const router = createBrowserRouter([
         element: <AdminMainPages />,
       },
       {
+        path: 'senior',
+        element: <SeniorInfoPage />,
+      },
+      {
+        path: 'senior/:id',
+        element: <SeniorDetailInfoPage />,
+      },
+      {
         // 어르신 등록 페이지
         path: 'senior/register',
         element: <SeniorRegisterLayout />,
@@ -197,7 +219,97 @@ const router = createBrowserRouter([
             path: 'care-service',
             element: <SeniorRegisterCareService />,
           },
+          {
+            path: 'nursing-grade',
+            element: <SeniorRegisterNursingGrade />,
+          },
+          {
+            path: 'symptoms',
+            element: <SeniorRegisterSymptoms />,
+          },
+          {
+            path: 'cohabitant',
+            element: <SeniorRegisterCohabitant />,
+          },
+          {
+            path: 'staff-contact',
+            element: <SeniorRegisterStaffContact />,
+          },
+          {
+            path: 'complete',
+            element: <SeniorRegisterComplete />,
+          },
         ],
+      },
+      {
+        path: 'matching',
+        children: [
+          {
+            index: true,
+            element: <Step1 />,
+          },
+          {
+            path: 'step2',
+            element: <Step2 />,
+          },
+          {
+            path: 'step3',
+            element: <Step3 />,
+          },
+          {
+            path: 'search',
+            element: <Search />,
+          },
+          {
+            path: 'step5',
+            element: <Step5 />,
+          },
+          {
+            path: 'step6',
+            element: <Step6 />,
+          },
+          {
+            path: 'step7',
+            element: <Step7 />,
+          },
+          {
+            path: 'complete',
+            element: <Complete />,
+          },
+        ],
+      },
+      {
+        path: 'matching/result',
+        element: <MatchingResult />,
+        children: [
+          {
+            path: '',
+          },
+        ],
+      },
+      {
+        path: 'matching/condition',
+        element: <MatchingCondition />,
+      },
+      {
+        path: 'matching/condition/coordinate',
+        element: <MatchingCoordinate />,
+      },
+      {
+        path: 'matching/result/coordinate',
+        element: <MatchingResultCoordinate />,
+      },
+      {
+        path: 'matching/result/coordinate/complete',
+        element: <MatchingResultCoordinateComplete />,
+      },
+      {
+        path: 'matching/result/complete',
+        element: <MatchingResultComplete />,
+      },
+      {
+        path: 'matching/result/failed',
+        element: <MatchingFailed />,
       },
     ],
   },

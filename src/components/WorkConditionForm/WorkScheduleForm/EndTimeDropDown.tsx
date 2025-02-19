@@ -4,17 +4,27 @@ import DropDown from '../../common/Dropdown/DropDown';
 const EndTimeDropDown = ({
   timeOptions,
   onChange,
+  defaultValue = '',
 }: {
   timeOptions: string[];
   onChange: (identity: 'start' | 'end', time: string) => void;
+  defaultValue?: string;
 }) => {
   const [endTime, setEndTime] = useState('');
-
+  console.log(endTime);
   useEffect(() => {
-    onChange('end', endTime);
-  }, [endTime]);
+    if (defaultValue !== '' && defaultValue !== endTime) {
+      setEndTime(defaultValue);
+    }
+  }, [defaultValue]);
+
+  const handleSelect = (value: string) => {
+    setEndTime(value);
+    onChange('end', value);
+  };
+
   return (
-    <DropDown selectValue={endTime} handleSelect={(value) => setEndTime(value)} className="h-full min-w-[125px]">
+    <DropDown selectValue={endTime} handleSelect={handleSelect} className="h-full min-w-[125px]">
       <DropDown.Trigger placeholder="근무 종료 시간" className="w-full text-center" />
       <DropDown.Options>
         {timeOptions.map((value) => (

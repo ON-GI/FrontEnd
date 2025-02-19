@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const SeniorRegisterCareTIme = () => {
   const navigate = useNavigate();
   const { seniorInfo, setSeniorInfo } = useContext(SeniorRegisterContext);
-  const [times, setTimes] = useState<Times[]>([]);
+  const [times, setTimes] = useState<Times[]>(seniorInfo.careTimes || []);
 
   const onChange = (careTime: Times) => {
     setTimes((prev) => [...prev, careTime]);
@@ -38,7 +38,7 @@ const SeniorRegisterCareTIme = () => {
         >
           뒤로가기
         </button>
-        <BaseButton disabled={times.length === 0} onClick={onSubmit}>
+        <BaseButton disabled={times.length === 0 && seniorInfo.careTimes.length === 0} onClick={onSubmit}>
           입력완료
         </BaseButton>
       </div>

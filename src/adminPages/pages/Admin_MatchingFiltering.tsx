@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const categories = [
   { key: 'all', label: '전체' },
@@ -50,7 +51,7 @@ const dummyData = [
 
 const MatchingRequestList = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
-
+  const navigate = useNavigate();
   // 선택한 카테고리에 맞게 데이터 필터링
   const filteredData =
     selectedCategory === 'all' ? dummyData : dummyData.filter((item) => item.status === selectedCategory);
@@ -107,7 +108,10 @@ const MatchingRequestList = () => {
             </p>
 
             {/* 상세 확인 버튼 */}
-            <button className="bg-primary-500 mt-3 w-full rounded-md py-2 text-white shadow-md">
+            <button
+              onClick={() => navigate('/caregiver/matching/elderly-info')}
+              className="bg-primary-500 mt-3 w-full rounded-md py-2 text-white shadow-md"
+            >
               상세 내용 확인 →
             </button>
           </div>

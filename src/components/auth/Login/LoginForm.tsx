@@ -68,7 +68,10 @@ const LoginForm = () => {
       <div>
         <p className="mb-4 text-center text-gray-900">
           아직 회원이 아니신가요?{' '}
-          <Link to={q === 'caregiver' ? '/signup/caregiver/step1' : '/adminSignup/step1'} className="text-primary-400">
+          <Link
+            to={q === 'caregiver' ? '/signup/caregiver/step1' : '/signup/center/step1'}
+            className="text-primary-400"
+          >
             회원가입 하기
           </Link>
         </p>

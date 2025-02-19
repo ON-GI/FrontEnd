@@ -1,7 +1,9 @@
 import BaseButton from '../../../../../components/common/BaseButton';
 import { useNavigate } from 'react-router-dom';
+
+import { ChangeEvent, useCallback, useContext, useEffect, useState } from 'react';
 import CheckBox from '../../../../../components/common/CheckBox';
-import { ChangeEvent, useState } from 'react';
+import { SeniorRegisterContext } from './SeniorRegisterLayout';
 
 const toiletingCareOptions = [
   // 배변 보조
@@ -41,58 +43,100 @@ const dailyLivingSupportOptions = [
 ];
 
 const SeniorRegisterCareService = () => {
-  const [] = useState();
   const navigate = useNavigate();
-  const onSubmit = () => {};
+  const { seniorInfo, setSeniorInfo } = useContext(SeniorRegisterContext);
 
-  const onChange = (selectList: string[]) => {
-    console.log(selectList);
+  const [toiletingCare, setToiletingCare] = useState<string[]>([]);
+  const [feedingCare, setFeedingCare] = useState<string[]>([]);
+  const [mobilityCare, setMobilityCare] = useState<string[]>([]);
+  const [dailyLivingSupport, setDailyLivingSupport] = useState<string[]>([]);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+
+  // 기존 선택된 항목 불러오기
+  useEffect(() => {
+    const careDetails =
+      seniorInfo.careCondition && 'careDetails' in seniorInfo.careCondition ? seniorInfo.careCondition.careDetails : [];
+    if (Array.isArray(careDetails)) {
+      setToiletingCare(careDetails.filter((item) => toiletingCareOptions.some((opt) => opt.value === item)));
+      setFeedingCare(careDetails.filter((item) => feedingCareOptions.some((opt) => opt.value === item)));
+      setMobilityCare(careDetails.filter((item) => mobilityCareOptions.some((opt) => opt.value === item)));
+      setDailyLivingSupport(careDetails.filter((item) => dailyLivingSupportOptions.some((opt) => opt.value === item)));
+    }
+  }, [seniorInfo]);
+
+  // 폼 활성화 여부 체크
+  useEffect(() => {
+    setIsFormValid(
+      toiletingCare.length > 0 && feedingCare.length > 0 && mobilityCare.length > 0 && dailyLivingSupport.length > 0,
+    );
+  }, [toiletingCare, feedingCare, mobilityCare, dailyLivingSupport]);
+
+  // 카테고리별 상태 변경 로직
+  const handleCategoryChange = (prev: string[], value: string, setState: (newState: string[]) => void) => {
+    if (value === 'NOT_APPLICABLE') {
+      setState(['NOT_APPLICABLE']);
+    } else {
+      setState(
+        prev.includes('NOT_APPLICABLE')
+          ? [value]
+          : prev.includes(value)
+            ? prev.filter((item) => item !== value)
+            : [...prev, value],
+      );
+    }
   };
+
+  // 제출 시 선택된 항목을 seniorInfo에 저장 후 페이지 이동
+  const onSubmit = () => {
+    const selectedCareDetails = [...toiletingCare, ...feedingCare, ...mobilityCare, ...dailyLivingSupport].filter(
+      (item) => item !== 'NOT_APPLICABLE',
+    );
+
+    setSeniorInfo((prev) => ({
+      ...prev,
+      careCondition: { ...prev.careCondition, careDetails: selectedCareDetails },
+    }));
+
+    navigate('/center/senior/register/nursing-grade');
+  };
+
   return (
     <section className="flex h-full flex-col justify-between">
       <div className="p-5">
-        <div>
-          <div>
-            <h3 className="mb-5 text-2xl font-semibold">
-              어르신에게 필요한 <br />
-              서비스를 모두 선택해주세요
-            </h3>
-          </div>
-        </div>
+        <h3 className="mb-5 text-2xl font-semibold">
+          어르신에게 필요한 <br /> 서비스를 모두 선택해주세요
+        </h3>
 
         <div className="space-y-4">
-          <CheckBox
-            resetValue="NOT_APPLICABLE"
-            checkBoxList={toiletingCareOptions}
-            checkBoxTitle="배변보조(복수선택 가능)"
-            required
-            lastFill
-            onChange={onChange}
-          />
-          <CheckBox
-            resetValue="NOT_APPLICABLE"
-            checkBoxList={feedingCareOptions}
-            checkBoxTitle="식사보조(복수선택 가능)"
-            required
-            lastFill
-            onChange={onChange}
-          />
-          <CheckBox
-            resetValue="NOT_APPLICABLE"
-            checkBoxList={mobilityCareOptions}
-            checkBoxTitle="이동보조(복수선택 가능)"
-            required
-            lastFill
-            onChange={onChange}
-          />
-          <CheckBox
-            resetValue="NOT_APPLICABLE"
-            checkBoxList={dailyLivingSupportOptions}
-            checkBoxTitle="일상생활(복수선택 가능)"
-            required
-            lastFill
-            onChange={onChange}
-          />
+          {[
+            { label: '배변보조', options: toiletingCareOptions, state: toiletingCare, setter: setToiletingCare },
+            { label: '식사보조', options: feedingCareOptions, state: feedingCare, setter: setFeedingCare },
+            { label: '이동보조', options: mobilityCareOptions, state: mobilityCare, setter: setMobilityCare },
+            {
+              label: '일상생활 지원',
+              options: dailyLivingSupportOptions,
+              state: dailyLivingSupport,
+              setter: setDailyLivingSupport,
+            },
+          ].map(({ label, options, state, setter }) => (
+            <div key={label}>
+              <p className="mb-2 block font-medium">
+                {label} (복수선택 가능) <span className="text-[#FF0000]">*</span>
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {options.map((item) => (
+                  <CheckBox
+                    label={item.label}
+                    value={item.value}
+                    key={item.value}
+                    className="last:col-span-2"
+                    onChange={() => handleCategoryChange(state, item.value, setter)}
+                    checked={state.includes(item.value)}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -103,7 +147,9 @@ const SeniorRegisterCareService = () => {
         >
           뒤로가기
         </button>
-        <BaseButton onClick={onSubmit}>입력완료</BaseButton>
+        <BaseButton onClick={onSubmit} disabled={!isFormValid}>
+          입력완료
+        </BaseButton>
       </div>
     </section>
   );

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import EndTimeDropDown from '../../../WorkConditionForm/WorkScheduleForm/EndTimeDropDown';
 import StartTimeDropDown from '../../../WorkConditionForm/WorkScheduleForm/StartTimeDropDown';
 import { Times } from '../../../../types/senior/seniorRegister';
+import { SeniorRegisterContext } from '../../../../routes/pages/center/senior/register/SeniorRegisterLayout';
 
 const timeOptions = Array.from({ length: 24 }, (_, i) => {
   const hour = i.toString().padStart(2, '0');
@@ -12,47 +13,48 @@ const SeniorCareTimeFormRow = ({
   children,
   onChange,
   dayOfWeek,
+  defaultStartTime,
+  defaultEndTime,
 }: {
   children: React.ReactNode;
   onChange: (careTime: Times) => void;
   dayOfWeek: string;
+  defaultStartTime?: string;
+  defaultEndTime?: string;
 }) => {
-  const [startTime, setStartTime] = useState<string>();
-  const [endTime, setEndTime] = useState<string>();
-  const [valid, setValid] = useState<boolean>(false);
+  const startTimeRef = useRef(defaultStartTime || '');
+  const endTimeRef = useRef(defaultEndTime || '');
+  const [valid, setValid] = useState<boolean>(!!(defaultStartTime && defaultEndTime));
 
-  const onChangeTime = (identity: 'start' | 'end', time: string) => {
+  const handleChange = (identity: 'start' | 'end', time: string) => {
     if (identity === 'start') {
-      setStartTime(time);
+      startTimeRef.current = time;
     } else {
-      setEndTime(time);
+      endTimeRef.current = time;
     }
-  };
 
-  useEffect(() => {
-    if (startTime && endTime) {
+    if (startTimeRef.current && endTimeRef.current) {
       setValid(true);
       onChange({
         dayOfWeek,
-        startTime,
-        endTime,
+        startTime: startTimeRef.current,
+        endTime: endTimeRef.current,
       });
     }
-  }, [startTime, endTime]);
+  };
 
   return (
     <li className="flex gap-4">
       <div
-        className={`${valid ? 'bg-primary-400 text-white' : 'bg-gray-100'} flex size-[50px] items-center justify-center rounded-lg bg-gray-100 transition-colors`}
+        className={`${valid ? 'bg-primary-400 text-white' : 'bg-gray-100'} flex size-[50px] items-center justify-center rounded-lg transition-colors`}
       >
         {children}
       </div>
       <div className="w-[45%]">
-        <StartTimeDropDown timeOptions={timeOptions} onChange={onChangeTime} />
+        <StartTimeDropDown timeOptions={timeOptions} onChange={handleChange} defaultValue={startTimeRef.current} />
       </div>
-
       <div className="w-[45%]">
-        <EndTimeDropDown timeOptions={timeOptions} onChange={onChangeTime} />
+        <EndTimeDropDown timeOptions={timeOptions} onChange={handleChange} defaultValue={endTimeRef.current} />
       </div>
     </li>
   );

@@ -7,14 +7,14 @@ const Search = () => {
   const [animationData, setAnimationData] = useState(null);
 
   useEffect(() => {
-    fetch('/images/animations/loading.json')
+    fetch('/public/animations/loading.json')
       .then((response) => response.json())
       .then((data) => setAnimationData(data))
       .catch((error) => console.error('애니메이션 로드 실패:', error));
 
     const timer = setTimeout(() => {
       navigate('/center/matching/step5');
-    }, 3000);
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, [navigate]);

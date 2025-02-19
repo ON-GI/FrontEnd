@@ -34,7 +34,7 @@ const CareGiverMain = () => {
           {/* Profile & My-page */}
           <div className="mb-6 flex justify-between">
             <div>
-              <div className="mb-3">
+              <div className="mb-5">
                 <img src="src\assets\Union.png" alt="ONGI-LOGO" />
               </div>
               <h3 className="text-2xl text-gray-900">
@@ -47,12 +47,9 @@ const CareGiverMain = () => {
               </div>
 
               {/* 라우트 경로 임의 설정 */}
-              <Link
-                to="/caregiver/my"
-                className="block rounded-lg bg-gray-100 py-1.5 text-center text-sm text-gray-900"
-              >
+              <button className="block w-full cursor-pointer rounded-lg bg-gray-100 py-1.5 text-center text-sm text-gray-900">
                 마이페이지
-              </Link>
+              </button>
             </div>
           </div>
 

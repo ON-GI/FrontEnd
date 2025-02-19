@@ -4,22 +4,27 @@ import DropDown from '../../common/Dropdown/DropDown';
 const StartTimeDropDown = ({
   timeOptions,
   onChange,
+  defaultValue = '',
 }: {
   timeOptions: string[];
   onChange: (identity: 'start' | 'end', time: string) => void;
+  defaultValue?: string;
 }) => {
-  const [startTime, setStartTime] = useState('');
+  const [startTime, setStartTime] = useState(defaultValue);
+
   useEffect(() => {
-    onChange('start', startTime);
-  }, [startTime]);
+    if (defaultValue !== '' && defaultValue !== startTime) {
+      setStartTime(defaultValue);
+    }
+  }, [defaultValue]);
+
+  const handleSelect = (value: string) => {
+    setStartTime(value);
+    onChange('start', value);
+  };
+
   return (
-    <DropDown
-      selectValue={startTime}
-      handleSelect={(value) => {
-        setStartTime(value);
-      }}
-      className="h-full min-w-[125px]"
-    >
+    <DropDown selectValue={startTime} handleSelect={handleSelect} className="h-full min-w-[125px]">
       <DropDown.Trigger placeholder="근무 시작 시간" className="w-full text-center" />
       <DropDown.Options>
         {timeOptions.map((value) => (

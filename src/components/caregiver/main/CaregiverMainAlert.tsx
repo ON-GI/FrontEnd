@@ -22,7 +22,9 @@ const CaregiverMainAlert = () => {
       </div>
 
       <div>
-        <p className="text-lg font-medium text-gray-900">확인하지 않은 매칭 건이 아직 없어요</p>
+        <p className="text-lg font-medium text-gray-900">
+          아직 확인하지 않은 매칭이 <span className="text-primary-400 font-semibold">5건</span> 있어요!
+        </p>
         <p className="text-sm text-gray-600">매칭이 오면 빠르게 알려드릴게요!</p>
       </div>
     </div>

@@ -1,4 +1,8 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const MatchingPending = () => {
+  const navigate = useNavigate();
   const dummyData = Array(5).fill({
     name: '김OO 어르신',
     schedule: '월요일 ~ 토요일 (오전, 오후)',
@@ -31,7 +35,12 @@ const MatchingPending = () => {
               <span className="font-semibold">시급</span> {match.hourlyWage.toLocaleString()}원
             </p>
 
-            <button className="mt-3 w-full rounded-md bg-green-600 py-2 text-white shadow-md">상세 내용 확인 →</button>
+            <button
+              onClick={() => navigate('/caregiver/matching/elderly-info')}
+              className="mt-3 w-full cursor-pointer rounded-md bg-green-600 py-2 text-white shadow-md"
+            >
+              상세 내용 확인 →
+            </button>
           </div>
         ))}
       </div>
