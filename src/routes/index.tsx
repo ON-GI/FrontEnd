@@ -34,6 +34,15 @@ import AdminMainPages from '../adminPages/pages/Admin_MainPage';
 import AdminMatchingInfo from '../adminPages/pages/Admin_MatchingInfo';
 import AdminMatchingFiltering from '../adminPages/pages/Admin_MatchingFiltering';
 
+import Step1 from '../adminMatching/pages/Step1';
+import Step2 from '../adminMatching/pages/Step2';
+import Step3 from '../adminMatching/pages/Step3';
+import Search from '../adminMatching/pages/Search';
+import Step5 from '../adminMatching/pages/Step5';
+import Step6 from '../adminMatching/pages/Step6';
+import Step7 from '../adminMatching/pages/Step7';
+import Complete from '../adminMatching/pages/Complete';
+
 const CaregiverLayout = () => (
   <SignupProvider>
     <Outlet />
@@ -53,6 +62,8 @@ const CaregiverMatchingLayout = () => (
 );
 
 const CenterPagesLayout = () => <Outlet />;
+
+const AdminMatchingLayout = () => <Outlet />;
 
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
@@ -109,25 +120,22 @@ const router = createBrowserRouter([
       { path: 'matching-filtering', element: <AdminMatchingFiltering /> },
     ],
   },
+
   {
-    path: '/work-condition',
-    element: <WorkConditionPage />,
+    path: '/center/matching',
+    element: <AdminMatchingLayout />,
     children: [
-      {
-        index: true,
-        path: 'location',
-        element: <WorkLocationForm />,
-      },
-      {
-        path: 'schedule',
-        element: <WorkScheduleForm />,
-      },
-      {
-        path: 'confirm',
-        element: <WorkConditionConfirm />,
-      },
+      { path: 'step1', element: <Step1 /> },
+      { path: 'step2', element: <Step2 /> },
+      { path: 'step3', element: <Step3 /> },
+      { path: 'search', element: <Search /> },
+      { path: 'step5', element: <Step5 /> },
+      { path: 'step6', element: <Step6 /> },
+      { path: 'step7', element: <Step7 /> },
+      { path: 'complete', element: <Complete /> },
     ],
   },
+
   {
     path: '/work-condition',
     element: <WorkConditionPage />,
