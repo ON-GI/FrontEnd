@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { WorkTime } from '../../../routes/pages/work-condition/WorkScheduleForm';
+import { WorkTime } from '../../../routes/pages/caregiver/work-condition/WorkScheduleForm';
 import { WorkConditionContext } from '../WorkConditionFormProvider';
 
 export const dayOfWeek = [
