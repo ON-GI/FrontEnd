@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { WorkRegions } from '../../../types/workCondition';
+import { WorkRegions } from '../../../../types/workCondition';
 
-import { WorkConditionContext } from '../../../components/WorkConditionForm/WorkConditionFormProvider';
+import { WorkConditionContext } from '../../../../components/WorkConditionForm/WorkConditionFormProvider';
 
-import RegionSelector from '../../../components/RegionSelector/RegionSelector';
+import RegionSelector from '../../../../components/RegionSelector/RegionSelector';
 
 const WorkLocationForm = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const WorkLocationForm = () => {
   const onSubmit = (workRegions: WorkRegions[]) => {
     setWorkConditions({ ...workConditions, workRegions });
 
-    navigate('/work-condition/schedule');
+    navigate('/caregiver/work-conditions/schedule');
   };
 
   return (
@@ -27,7 +27,11 @@ const WorkLocationForm = () => {
         <p className="text-gray-600">최대 5개까지 선택할 수 있어요</p>
       </div>
 
-      <RegionSelector onSubmit={onSubmit} defaultValues={workConditions.workRegions} />
+      <RegionSelector
+        onClickBackButton={() => navigate('/caregiver')}
+        onSubmit={onSubmit}
+        defaultValues={workConditions.workRegions}
+      />
     </div>
   );
 };
