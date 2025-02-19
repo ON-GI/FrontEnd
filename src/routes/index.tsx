@@ -42,6 +42,14 @@ import Step5 from '../adminMatching/pages/Step5';
 import Step6 from '../adminMatching/pages/Step6';
 import Step7 from '../adminMatching/pages/Step7';
 import Complete from '../adminMatching/pages/Complete';
+import WorkConditionComplete from './pages/caregiver/work-condition/WorkConditionComplete';
+import CareGiverLayout from './pages/caregiver/CareGiverLayout';
+import CareGiverMain from './pages/caregiver/CareGiverMain';
+import SeniorRegisterLayout from './pages/center/senior/register/SeniorRegisterLayout';
+import SeniorRegisterBaseInfo from './pages/center/senior/register/SeniorRegisterBaseInfo';
+import SeniorRegisterLocation from './pages/center/senior/register/SeniorRegisterLocation';
+import SeniorRegisterCareTIme from './pages/center/senior/register/SeniorRegisterCareTIme';
+import SeniorRegisterCareService from './pages/center/senior/register/SeniorRegisterCareService';
 
 const CaregiverLayout = () => (
   <SignupProvider>
@@ -68,85 +76,128 @@ const AdminMatchingLayout = () => <Outlet />;
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/login', element: <Login /> },
-
-  // 요양보호사 회원가입
   {
-    path: '/caregiver/signup',
-    element: <CaregiverLayout />,
+    // 회원가입
+    path: '/signup',
     children: [
-      { path: 'step1', element: <StepIdPassword /> },
-      { path: 'step2', element: <StepBasicInfo /> },
-      { path: 'step3', element: <StepCertifications /> },
-      { path: 'step4', element: <StepOptionalInfo /> },
-      { path: 'step5', element: <StepExperienceServices /> },
-      { path: 'step6', element: <StepExperienceServices_2 /> },
-      { path: 'complete', element: <SignupComplete /> },
+      {
+        // 요양보호사 회원가입
+        path: 'caregiver',
+        element: <CaregiverLayout />,
+        children: [
+          { path: 'step1', element: <StepIdPassword /> },
+          { path: 'step2', element: <StepBasicInfo /> },
+          { path: 'step3', element: <StepCertifications /> },
+          { path: 'step4', element: <StepOptionalInfo /> },
+          { path: 'step5', element: <StepExperienceServices /> },
+          { path: 'step6', element: <StepExperienceServices_2 /> },
+          { path: 'complete', element: <SignupComplete /> },
+        ],
+      },
+      {
+        // 관리자 회원가입
+        path: 'center',
+        element: <CenterLayout />,
+        children: [
+          { path: 'step1', element: <AdminSignupStep1 /> },
+          { path: 'step2', element: <AdminSignupStep2 /> },
+          { path: 'step3', element: <AdminSignupStep3 /> },
+          { path: 'step4', element: <AdminSignupStep4 /> },
+          { path: 'step5', element: <AdminSignupStep5 /> },
+          { path: 'complete', element: <AdminSignupComplete /> },
+        ],
+      },
+    ],
+  },
+  // 요양 보호사
+  {
+    path: '/caregiver',
+    element: <CareGiverLayout />,
+    children: [
+      {
+        // 요양 보호사 메인페이지
+        index: true,
+        element: <CareGiverMain />,
+      },
+      {
+        // 요양 보호사 근무조건 등록
+        path: 'work-conditions',
+        element: <WorkConditionPage />,
+        children: [
+          {
+            index: true,
+            path: 'location',
+            element: <WorkLocationForm />,
+          },
+          {
+            path: 'schedule',
+            element: <WorkScheduleForm />,
+          },
+          {
+            path: 'confirm',
+            element: <WorkConditionConfirm />,
+          },
+          {
+            path: 'complete',
+            element: <WorkConditionComplete />,
+          },
+        ],
+      },
+      {
+        // 확인하지 않은 매칭 목록
+        path: 'unconfirmed-matching',
+        element: <AdminMatchingInfo />,
+      },
+      {
+        // 매칭 요청 목록 조회 (이미 확인한 매칭)
+        path: 'matching',
+        element: <CaregiverMatchingLayout />,
+        children: [
+          {
+            index: true,
+            element: <AdminMatchingFiltering />,
+          },
+          { path: 'elderly-info', element: <ElderlyInfo /> },
+          { path: 'adjustment', element: <AdjustForm /> },
+          { path: 'qualification', element: <QualificationForm /> },
+          { path: 'completed', element: <MatchingComplete /> },
+        ],
+      },
     ],
   },
 
-  // 요양보호사 매칭
   {
-    path: '/caregiver/matching',
-    element: <CaregiverMatchingLayout />,
-    children: [
-      { path: 'elderly-info', element: <ElderlyInfo /> },
-      { path: 'adjustment', element: <AdjustForm /> },
-      { path: 'qualification', element: <QualificationForm /> },
-      { path: 'completed', element: <MatchingComplete /> },
-    ],
-  },
-
-  // 관리자 회원가입
-  {
-    path: '/center/signup',
-    element: <CenterLayout />,
-    children: [
-      { path: 'step1', element: <AdminSignupStep1 /> },
-      { path: 'step2', element: <AdminSignupStep2 /> },
-      { path: 'step3', element: <AdminSignupStep3 /> },
-      { path: 'step4', element: <AdminSignupStep4 /> },
-      { path: 'step5', element: <AdminSignupStep5 /> },
-      { path: 'complete', element: <AdminSignupComplete /> },
-    ],
-  },
-
-  // 관리자 페이지
-  {
+    // 관리자 페이지
     path: '/center',
     element: <CenterPagesLayout />,
     children: [
-      { index: true, element: <AdminMainPages /> }, // 기본 관리자 메인 페이지
-      { path: 'matching-info', element: <AdminMatchingInfo /> },
-      { path: 'matching-filtering', element: <AdminMatchingFiltering /> },
-    ],
-  },
-
-  {
-    path: '/center/matching',
-    element: <AdminMatchingLayout />,
-    children: [
-      { path: 'elderly-info', element: <ElderlyInfo /> },
-      { path: 'adjustment', element: <AdjustForm /> },
-      { path: 'qualification', element: <QualificationForm /> },
-      { path: 'completed', element: <MatchingComplete /> },
-    ],
-  },
-  {
-    path: '/work-condition',
-    element: <WorkConditionPage />,
-    children: [
       {
+        // 기본 관리자 메인 페이지
         index: true,
-        path: 'location',
-        element: <WorkLocationForm />,
+        element: <AdminMainPages />,
       },
       {
-        path: 'schedule',
-        element: <WorkScheduleForm />,
-      },
-      {
-        path: 'confirm',
-        element: <WorkConditionConfirm />,
+        // 어르신 등록 페이지
+        path: 'senior/register',
+        element: <SeniorRegisterLayout />,
+        children: [
+          {
+            path: 'basic-info',
+            element: <SeniorRegisterBaseInfo />,
+          },
+          {
+            path: 'location',
+            element: <SeniorRegisterLocation />,
+          },
+          {
+            path: 'care-time',
+            element: <SeniorRegisterCareTIme />,
+          },
+          {
+            path: 'care-service',
+            element: <SeniorRegisterCareService />,
+          },
+        ],
       },
     ],
   },
