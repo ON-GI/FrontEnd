@@ -18,10 +18,10 @@ import MatchingComplete from '../matching/components/MatchingComplete';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
-import WorkLocationForm from './pages/work-condition/WorkLocationForm';
-import WorkScheduleForm from './pages/work-condition/WorkScheduleForm';
-import WorkConditionPage from './pages/work-condition/WorkConditionPage';
-import WorkConditionConfirm from './pages/work-condition/WorkConditionConfirm';
+import WorkLocationForm from './pages/caregiver/work-condition/WorkLocationForm';
+import WorkScheduleForm from './pages/caregiver/work-condition/WorkScheduleForm';
+import WorkConditionPage from './pages/caregiver/work-condition/WorkConditionPage';
+import WorkConditionConfirm from './pages/caregiver/work-condition/WorkConditionConfirm';
 
 import AdminSignupStep1 from '../adminSignup/pages/AdminSignup_IdPassword';
 import AdminSignupStep2 from '../adminSignup/pages/AdminSignup_ChoiceRole';
@@ -29,6 +29,14 @@ import AdminSignupStep3 from '../adminSignup/pages/AdminSignup_CenterDirector';
 import AdminSignupStep4 from '../adminSignup/pages/AdminSignup_CenterDirector2';
 import AdminSignupStep5 from '../adminSignup/pages/AdminSignup_CenterMember';
 import AdminSignupComplete from '../adminSignup/pages/AdminSignup_Complete';
+import CareGiverMain from './pages/caregiver/CareGiverMain';
+import CareGiverLayout from './pages/caregiver/CareGiverLayout';
+import SeniorRegisterLayout from './pages/center/senior/register/SeniorRegisterLayout';
+import SeniorRegisterBaseInfo from './pages/center/senior/register/SeniorRegisterBaseInfo';
+import SeniorRegisterLocation from './pages/center/senior/register/SeniorRegisterLocation';
+import SeniorRegisterCareTIme from './pages/center/senior/register/SeniorRegisterCareTIme';
+import SeniorRegisterCareService from './pages/center/senior/register/SeniorRegisterCareService';
+import WorkConditionComplete from './pages/caregiver/work-condition/WorkConditionComplete';
 
 const CaregiverSignupLayout = () => (
   <SignupProvider>
@@ -64,7 +72,6 @@ const router = createBrowserRouter([
       { path: 'complete', element: <SignupComplete /> },
     ],
   },
-
   {
     path: '/adminSignup',
     element: <AdminSignupLayout />,
@@ -78,6 +85,40 @@ const router = createBrowserRouter([
     ],
   },
 
+  // 요양 보호사
+  {
+    path: '/caregiver',
+    element: <CareGiverLayout />,
+    children: [
+      {
+        index: true,
+        element: <CareGiverMain />,
+      },
+      {
+        path: 'work-conditions',
+        element: <WorkConditionPage />,
+        children: [
+          {
+            index: true,
+            path: 'location',
+            element: <WorkLocationForm />,
+          },
+          {
+            path: 'schedule',
+            element: <WorkScheduleForm />,
+          },
+          {
+            path: 'confirm',
+            element: <WorkConditionConfirm />,
+          },
+          {
+            path: 'complete',
+            element: <WorkConditionComplete />,
+          },
+        ],
+      },
+    ],
+  },
   {
     path: '/matching',
     element: <MatchingLayout />,
@@ -88,22 +129,37 @@ const router = createBrowserRouter([
       { path: 'completed', element: <MatchingComplete /> },
     ],
   },
+
+  // 관리자
   {
-    path: '/work-condition',
-    element: <WorkConditionPage />,
+    path: '/center',
+    // element -> 이 자리에는 공통 레이아웃 컴포넌트가 들어갑니다 ! 필요없으시면 주석 삭제 해주세요 !
     children: [
       {
         index: true,
-        path: 'location',
-        element: <WorkLocationForm />,
+        element: <Home />, // 이 자리에는 관리자용 메인페이지가 들어갑니다 !
       },
       {
-        path: 'schedule',
-        element: <WorkScheduleForm />,
-      },
-      {
-        path: 'confirm',
-        element: <WorkConditionConfirm />,
+        path: 'senior/register', // 어르신 등록 페이지
+        element: <SeniorRegisterLayout />,
+        children: [
+          {
+            path: 'basic-info',
+            element: <SeniorRegisterBaseInfo />,
+          },
+          {
+            path: 'location',
+            element: <SeniorRegisterLocation />,
+          },
+          {
+            path: 'care-time',
+            element: <SeniorRegisterCareTIme />,
+          },
+          {
+            path: 'care-service',
+            element: <SeniorRegisterCareService />,
+          },
+        ],
       },
     ],
   },
