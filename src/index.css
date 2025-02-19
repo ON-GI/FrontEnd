@@ -7,8 +7,8 @@
 body {
   min-height: 100svh;
   font-family: 'Pretendard Variable';
-  //background-color: #f4faf5;
-  background-color: #ffffff;
+  background-color: #f4faf5;
+  /* background-color: #ffffff; */
 }
 
 #root {
