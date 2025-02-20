@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import client from '../../../api/instnace';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { removeCookie } from '../../../utils/cookie'; // removeCookie 불러오기
 
 const CaregiverMainAlert = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const CaregiverMainAlert = () => {
   //         const response = await client.get('')
   //     }
   // })
-
+  // 로그아웃 함수
   return (
     <div
       className="bg-primary-50 mb-5 flex cursor-pointer items-center rounded-lg p-3"

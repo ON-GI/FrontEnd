@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'; // 🔹 React Router 추�
 import useAuthStore from '../../store/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
 import client from '../../api/instnace';
+import { removeCookie } from '../../utils/cookie'; // removeCookie 불러오기
 
 // 유저 프로필 컴포넌트
 const UserProfile = ({ userName }: { userName: string }) => {
@@ -113,10 +114,14 @@ const MainPage = () => {
 
           {/* 라우트 경로 임의 설정 */}
           <button
-            type="button"
-            className="block w-full cursor-pointer rounded-lg bg-gray-100 py-1.5 text-center text-sm text-gray-900"
+            className="block w-full cursor-pointer rounded-lg bg-red-500 py-1.5 text-center text-sm text-white"
+            onClick={() => {
+              removeCookie('accessToken'); // accessToken 삭제
+              removeCookie('role'); // role 삭제
+              navigate('/'); // 홈으로 이동
+            }}
           >
-            마이페이지
+            로그아웃
           </button>
         </div>
       </div>

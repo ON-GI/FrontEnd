@@ -4,6 +4,7 @@ import useAuthStore from '../../../store/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
 import client from '../../../api/instnace';
 import CaregiverMainAlert from '../../../components/caregiver/main/CaregiverMainAlert';
+import { removeCookie } from '../../../utils/cookie'; // removeCookie 불러오기
 
 const CareGiverMain = () => {
   const navigate = useNavigate();
@@ -47,8 +48,15 @@ const CareGiverMain = () => {
               </div>
 
               {/* 라우트 경로 임의 설정 */}
-              <button className="block w-full cursor-pointer rounded-lg bg-gray-100 py-1.5 text-center text-sm text-gray-900">
-                마이페이지
+              <button
+                className="block w-full cursor-pointer rounded-lg bg-red-500 py-1.5 text-center text-sm text-white"
+                onClick={() => {
+                  removeCookie('accessToken'); // accessToken 삭제
+                  removeCookie('role'); // role 삭제
+                  navigate('/'); // 홈으로 이동
+                }}
+              >
+                로그아웃
               </button>
             </div>
           </div>
